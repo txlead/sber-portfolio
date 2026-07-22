@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/svg+xml" href="/symbol.png">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Matt Hurski</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #e62a14;
+    --cream: #f7f3e8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--red);
+    color: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Instrument Serif', Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ───────────────────────────────────────── */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+  }
+
+  .logo {
+    display: flex; align-items: center;
+    text-decoration: none;
+  }
+  .logo img {
+    width: 52px; height: 52px;
+    animation: spin-slow 8s linear infinite;
+  }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .logo:hover img { opacity: 0.7; }
+
+  .header-center {
+    font-family: 'DM Sans', Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--cream);
+    text-decoration: none;
+    transition: opacity .2s ease;
+  }
+
+  .header-center:hover { opacity: 0.6; }
+
+  .header-right {
+    font-family: 'DM Sans', Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--cream);
+    text-decoration: none;
+    transition: opacity .2s ease;
+  }
+
+  .header-right:hover { opacity: 0.6; }
+
+  /* ── NOT FOUND ────────────────────────────────────── */
+  .not-found {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 1320px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 4vh 56px 16vh;
+    gap: 6vh;
+  }
+
+  .code {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(4px, 1.2vw, 18px);
+    font-family: 'DM Sans', Helvetica, sans-serif;
+    font-size: clamp(110px, 22vw, 320px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .ball-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 0.82em;
+    height: 0.82em;
+    margin: 0 -0.06em;
+  }
+
+  .ball-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: ball-bounce 3.2s ease-in-out infinite;
+  }
+
+  @keyframes ball-bounce {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-0.07em) rotate(18deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ball-wrap img { animation: none; }
+  }
+
+  .not-found-bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    text-align: center;
+  }
+
+  .not-found-bottom h1 {
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(32px, 6vw, 84px);
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  .home-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--cream);
+    text-decoration: none;
+    font-family: 'Inter', Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    border: 1.5px solid var(--cream);
+    border-radius: 999px;
+    padding: 16px 28px 16px 32px;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    transition: color .4s ease;
+  }
+  .home-link::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: var(--cream);
+    transform: translateX(-100%);
+    transition: transform .4s cubic-bezier(0.4,0,0.2,1);
+    z-index: 0;
+  }
+  .home-link:hover::before { transform: translateX(0); }
+  .home-link:hover { color: var(--red); }
+  .home-link span, .home-link svg { position: relative; z-index: 1; }
+
+  .home-link svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    transition: transform .2s ease;
+  }
+
+  .home-link:hover svg {
+    transform: translateX(3px);
+  }
+
+  /* ── CONTACT / FOOTER ─────────────────────────────── */
+  footer {
+    background: var(--red);
+    color: #fff;
+    font-family: 'Inter', Helvetica, Arial, sans-serif;
+    padding: 64px 56px 32px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .footer-grid {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+    padding-bottom: 40px;
+  }
+
+  .footer-col h3 {
+    font-family: 'DM Sans', 'Inter', Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+
+  .footer-col a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    margin-bottom: 8px;
+    opacity: 0.9;
+    transition: opacity .2s ease;
+  }
+
+  .footer-col a:hover {
+    opacity: 0.6;
+  }
+
+  .footer-col .note {
+    opacity: 0.65;
+    font-size: 13px;
+  }
+
+  .footer-col--center,
+  .footer-col--right {
+    text-align: left;
+  }
+
+  .footer-col a.icon-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-col a.icon-link svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+  }
+
+  .footer-bottom {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.25);
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+  }
+
+  .footer-hurski {
+    width: 100%;
+    margin-top: 40px;
+    line-height: 0;
+    display: flex;
+    align-items: flex-end;
+  }
+  .footer-hurski .hurski-text {
+    flex: 1;
+    height: auto;
+    display: block;
+    min-width: 0;
+  }
+  .footer-hurski .hurski-dot {
+    flex-shrink: 0;
+    width: 14%;
+    aspect-ratio: 1;
+    animation: spin-slow 8s linear infinite;
+    margin-bottom: -0.5%;
+    margin-left: -2%;
+  }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* ── PAGE CURTAIN (exit transition) ──────────────── */
+  .page-curtain {
+    position: fixed;
+    inset: 0;
+    background: #111;
+    transform: translateY(100%);
+    z-index: 9999;
+    pointer-events: none;
+  }
+
+  /* ── RESPONSIVE ───────────────────────────────────── */
+  @media (max-width: 700px) {
+    header { padding: 20px 24px; }
+    .header-center, .header-right { display: none; }
+    .logo img { width: 36px; height: 36px; }
+    .not-found { padding: 2vh 24px 8vh; gap: 4vh; }
+    .not-found-bottom { gap: 20px; }
+    .not-found-bottom h1 { width: 100%; font-size: clamp(28px, 9vw, 48px); }
+    footer { padding: 48px 24px 24px; }
+    .footer-grid { flex-direction: column; gap: 28px; padding-bottom: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-curtain" id="pageCurtain"></div>
+
+<!-- Header -->
+<header>
+  <a class="logo" href="index.html?skip"><img src="symbol_for_footer.png" alt="Matt Hurski" /></a>
+  <a class="header-center" href="about.html">About</a>
+  <a class="header-right" href="index.html#contact">Contact Me</a>
+</header>
+
+<!-- Not found -->
+<section class="not-found">
+  <div class="code">
+    <span>4</span>
+    <span class="ball-wrap"><img src="404/basketball.png" alt="Basketball"></span>
+    <span>4</span>
+  </div>
+  <div class="not-found-bottom">
+    <h1>Page not found</h1>
+    <a class="home-link" href="index.html">
+      <span>Back to home</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"/>
+        <path d="M13 6l6 6-6 6"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<!-- Footer / Contact -->
+<footer id="contact">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h3>Contact</h3>
+      <a href="mailto:uxhurski@gmail.com">uxhurski@gmail.com</a>
+      <a href="tel:+48787603923">+48 787 603 923 <span class="note">(rzadko odbieram)</span></a>
+    </div>
+    <div class="footer-col footer-col--center">
+      <h3>Photography</h3>
+      <a class="icon-link" href="https://www.instagram.com/ownthetalent/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>
+        ownthetalent
+      </a>
+    </div>
+    <div class="footer-col footer-col--right">
+      <h3>Design</h3>
+      <a href="https://www.linkedin.com/in/hurski/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer-col">
+      <h3>More</h3>
+      <a href="https://hurski.studio/" target="_blank" rel="noopener">Brand Portfolio</a>
+      <a href="404.html">Page (404)</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Matt Hurski
+  </div>
+  <div class="footer-hurski">
+    <img class="hurski-text" src="HURSKI_nodot.svg" alt="HURSKI">
+    <img class="hurski-dot" src="symbol_for_footer.png" alt="·">
+  </div>
+</footer>
+
+<script>
+document.querySelector('.home-link').addEventListener('click', function(e) {
+  e.preventDefault();
+  var href = this.href;
+  var curtain = document.getElementById('pageCurtain');
+  curtain.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+  curtain.style.transform = 'translateY(0)';
+  sessionStorage.setItem('introSeen', '1');
+  setTimeout(function() { window.location.href = href; }, 500);
+});
+</script>
+
+</body>
+</html>

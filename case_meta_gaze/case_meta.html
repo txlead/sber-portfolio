@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/svg+xml" href="/symbol.png">
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meta, Orion — Gaze-Controlled Interaction</title>
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { overscroll-behavior-y: none; }
+  body {
+    background: #ffffff;
+    color: #111;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+
+  .case-header {
+    position: relative;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 48px;
+    background: #fff;
+    border-bottom: none;
+  }
+  .case-header .ch-logo {
+    cursor: pointer; background: none; border: none; padding: 0;
+    display: flex; align-items: center;
+  }
+  .case-header .ch-logo img {
+    width: 52px; height: 52px;
+    animation: spin-slow 8s linear infinite;
+  }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .case-header .ch-logo:hover img { opacity: 0.7; }
+  .case-header nav { position: absolute; left: 50%; transform: translateX(-50%); }
+  .case-header nav a {
+    color: #111; text-decoration: none;
+    font-size: 14px; font-weight: 400;
+  }
+  .case-header nav a:hover { opacity: 0.6; }
+  .case-header .ch-about {
+    color: #111; text-decoration: none;
+    font-size: 14px; font-weight: 400;
+  }
+  .case-header .ch-about:hover { opacity: 0.6; }
+
+  .video-block {
+    width: 100%;
+    background: #f0f0f0;
+    line-height: 0;
+    margin: 0; padding: 0;
+    display: block;
+  }
+  .video-block video {
+    width: 100%; height: auto;
+    display: block;
+    object-fit: fill;
+    margin: 0; padding: 0;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 0 80px;
+    margin-bottom: 0;
+  }
+  .hero h1 {
+    font-size: 44px; font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 24px;
+  }
+  .hero p {
+    font-size: 17px; color: #666;
+    width: 100%; max-width: 100%;
+    line-height: 1.6;
+  }
+
+  .logo-section {
+    min-height: 80vh;
+    background: #f2f2f2;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-section svg { width: 120px; height: auto; }
+
+  .case-intro {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    padding: 160px 80px 80px;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .case-intro h2 {
+    font-size: 64px; font-weight: 400; line-height: 1.05;
+    letter-spacing: -0.015em;
+  }
+  .case-intro .body-text p { font-size: 15px; color: #333; margin-bottom: 0; line-height: 1.65; }
+
+  /* ── Structured rows (The problem / Insight / etc) ─────────────────── */
+  .case-rows {
+    max-width: 1400px; margin: 0 auto;
+    padding: 80px 80px 120px;
+    display: flex; flex-direction: column;
+    gap: 0;
+  }
+  .case-row {
+    display: grid; grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    padding: 32px 0;
+    border-top: 1px solid #e8e8e8;
+  }
+  .case-row:last-child { border-bottom: 1px solid #e8e8e8; }
+  .case-row-label {
+    font-size: 15px; font-weight: 400;
+    color: #2E5CE6;
+    padding-top: 2px;
+  }
+  .case-row-body {
+    font-size: 15px; color: #222;
+    line-height: 1.65; max-width: 680px;
+  }
+
+  section.block {
+    max-width: 1400px; margin: 0 auto;
+    padding: 60px 80px;
+  }
+  section.block h3 {
+    font-size: 15px; font-weight: 400; color: #2E5CE6;
+    margin-bottom: 18px;
+  }
+  section.block p {
+    font-size: 15px; color: #222; max-width: 680px;
+    margin-bottom: 16px; line-height: 1.65;
+  }
+  section.block img {
+    width: 100%; height: auto;
+    border-radius: 16px;
+    margin-top: 32px;
+    display: block;
+  }
+  .grid-2 {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    margin-top: 32px;
+  }
+  .grid-2 img { margin-top: 0; }
+
+  .tags { display: none; }
+
+  .footer-nav {
+    padding: 100px 40px 140px;
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+  }
+  .footer-nav strong { color: #111; }
+
+  /* ── Outro ──────────────────────────────────────────────────── */
+  .outro {
+    min-height: 60vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: #ffffff;
+    padding: 100px 80px;
+  }
+  .outro-thanks {
+    font-family: -apple-system, 'SF Pro Display', BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    font-size: 48px; font-weight: 700;
+    color: #111; letter-spacing: -0.01em;
+    text-align: center; margin-bottom: 56px; margin-top: -40px;
+  }
+  .outro-next {
+    display: inline-flex; align-items: center; gap: 16px;
+    font-family: -apple-system, 'SF Pro Display', BlinkMacSystemFont, sans-serif;
+    font-size: 32px; font-weight: 500;
+    color: #111; text-decoration: none;
+    border: 1.5px solid #111;
+    padding: 36px 80px; border-radius: 100px;
+    letter-spacing: -0.01em;
+    position: relative; overflow: hidden;
+    transition: color .4s ease;
+  }
+  .outro-next::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; background: #111;
+    transform: translateX(-100%);
+    transition: transform .4s cubic-bezier(0.4,0,0.2,1); z-index: 0;
+  }
+  .outro-next:hover::before { transform: translateX(0); }
+  .outro-next:hover { color: #fff; }
+  .outro-next span, .outro-next .arr { position: relative; z-index: 1; }
+  .outro-next .arr { width: 32px; height: 16px; display: inline-block; flex: none; }
+
+  /* ── Back button ─────────────────────────────────────────────── */
+  .page-curtain {
+    position: fixed; left: 0; right: 0; bottom: 0; height: 100%;
+    background: #111; transform: translateY(100%);
+    pointer-events: none;
+    transition: transform .6s cubic-bezier(0.76,0,0.24,1); z-index: 9999;
+  }
+  .page-curtain.on { transform: translateY(0); pointer-events: all; }
+
+  /* ── Footer ──────────────────────────────────────────────────── */
+  footer {
+    background: #e8291c; color: #fff;
+    font-family: -apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    padding: 64px 56px 32px;
+  }
+  .footer-grid {
+    max-width: 1320px; margin: 0 auto;
+    display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between;
+    padding-bottom: 40px;
+  }
+  .footer-col h3 { font-size: 15px; font-weight: 500; margin-bottom: 14px; color: #fff; }
+  .footer-col a {
+    display: block; color: #fff; text-decoration: none;
+    font-size: 15px; margin-bottom: 8px; opacity: 0.9;
+    transition: opacity .2s ease; position: relative; width: fit-content;
+  }
+  .footer-col a:hover { opacity: 1; }
+  .footer-col a .draw-svg {
+    position: absolute; bottom: -4px; left: 0;
+    width: 100%; height: 7px; overflow: visible; pointer-events: none;
+  }
+  .footer-col a .draw-svg path {
+    fill: none; stroke: #fff; stroke-width: 1.5; stroke-linecap: round;
+    stroke-dasharray: 115; stroke-dashoffset: 115;
+    transition: stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .footer-col a:hover .draw-svg path { stroke-dashoffset: 0; }
+  .footer-col .note { opacity: 0.65; font-size: 13px; }
+  .footer-col a.icon-link { display: inline-flex; align-items: center; gap: 8px; }
+  .footer-col a.icon-link svg { width: 18px; height: 18px; flex: none; }
+  .footer-bottom {
+    max-width: 1320px; margin: 0 auto; padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.25);
+    font-size: 14px; color: rgba(255,255,255,0.8);
+  }
+  .footer-hurski { width: 100%; margin-top: 40px; line-height: 0; display: flex; align-items: flex-end; }
+  .footer-hurski .hurski-text { flex: 1; height: auto; display: block; min-width: 0; }
+  .footer-hurski .hurski-dot { flex-shrink: 0; width: 14%; aspect-ratio: 1; animation: spin-slow 8s linear infinite; margin-bottom: -0.5%; margin-left: -2%; }
+
+  /* ── Gesture download buttons ──────────────────────────────── */
+  .dl-btn {
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    background: #111; color: #fff;
+    text-decoration: none;
+    padding: 18px 48px;
+    border-radius: 14px;
+    font-size: 15px; font-weight: 500;
+    min-width: 240px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    z-index: 1;
+  }
+  .dl-btn::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #2E5CE6;
+    transform: translateX(-100%);
+    transition: transform .4s cubic-bezier(0.4,0,0.2,1);
+    z-index: 1;
+  }
+  @media (hover: hover) {
+    .dl-btn:hover::before { transform: translateX(0); }
+  }
+  .dl-btn svg, .dl-btn span { position: relative; z-index: 3; pointer-events: none; }
+  .dl-btn .btn-fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 0%; background: #2E5CE6;
+    transition: none; z-index: 2;
+  }
+  .dl-btn.pointed { transform: scale(1.04); box-shadow: 0 0 0 2px #2E5CE6; }
+  .dl-btn.triggered { transform: scale(0.97); }
+
+  /* ── Burger menu ── */
+  .burger-btn { display: none; }
+  .mob-menu { position: fixed; inset: 0; background: #fff; z-index: 9000; flex-direction: column; align-items: center; justify-content: center; gap: 40px; opacity: 0; pointer-events: none; display: flex; transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1); }
+  .mob-menu.open { opacity: 1; pointer-events: all; }
+  .mob-menu a { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 32px; font-weight: 500; color: #0d0d0d; text-decoration: none; letter-spacing: -0.02em; transform: translateY(18px); opacity: 0; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .mob-menu.open a { transform: translateY(0); opacity: 1; }
+  .mob-menu.open a:nth-child(2) { transition-delay: 0.06s; }
+  .mob-menu.open a:nth-child(3) { transition-delay: 0.12s; }
+  .mob-menu.open a:nth-child(4) { transition-delay: 0.18s; }
+  .mob-menu.open a:nth-child(5) { transition-delay: 0.24s; }
+  .mob-menu-close { position: absolute; top: 12px; right: 20px; background: none; border: none; cursor: pointer; padding: 6px; opacity: 0; transform: rotate(-45deg); transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s; }
+  .mob-menu.open .mob-menu-close { opacity: 1; transform: rotate(0deg); }
+
+  @media (max-width: 700px) {
+    .case-header { padding: 12px 24px; }
+    .case-header .ch-logo img { width: 36px; height: 36px; }
+    .case-header nav, .case-header .ch-about { display: none; }
+    .burger-btn { display: flex; flex-direction: column; gap: 6px; background: none; border: none; cursor: pointer; padding: 6px; }
+    .burger-btn span { display: block; width: 24px; height: 1.5px; background: #111; border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease; }
+    .burger-btn.active span:nth-child(1) { transform: translateY(3.75px) rotate(45deg); }
+    .burger-btn.active span:nth-child(2) { transform: translateY(-3.75px) rotate(-45deg); }
+
+    .hero h1 { font-size: clamp(20px, 5.5vw, 32px); white-space: normal; letter-spacing: -0.02em; }
+    .hero p { font-size: 14px; }
+    .hero { padding: 0 24px; }
+    p br { display: none; }
+    section.block { padding: 40px 24px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .dl-btn { padding: 14px 24px; font-size: 13px; min-width: 0; width: 100%; border-radius: 10px; }
+    .dl-btn svg { width: 16px; height: 16px; }
+    .btn-row { flex-direction: column !important; gap: 12px !important; }
+    .outro-thanks { font-size: 36px; line-height: 1.05; }
+  }
+
+  @media (max-width: 900px) {
+    .case-intro { grid-template-columns: 1fr; gap: 32px; padding: 60px 24px 40px; }
+    .case-intro h2 { font-size: 42px; }
+    .case-rows { padding: 0 24px 80px; }
+    .case-row { grid-template-columns: 1fr; gap: 12px; }
+    section.block { padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="mob-menu" id="mobMenu">
+  <button class="mob-menu-close" id="mobMenuClose" aria-label="Close menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="../about.html">About</a>
+  <a href="mailto:uxhurski@gmail.com">Contact</a>
+  <a href="https://hurski.studio/" target="_blank" rel="noopener">Brand Portfolio</a>
+</div>
+
+<header class="case-header" id="caseHeader">
+  <button class="ch-logo" id="backBtn"><img src="../symbol.png" alt="Matt Hurski" /></button>
+  <nav><a href="../index.html">Home</a></nav>
+  <a class="ch-about" href="../about.html">About</a>
+  <button class="burger-btn" id="burgerBtn" aria-label="Open menu"><span></span><span></span></button>
+</header>
+
+<section class="hero">
+  <h1>Your eyes are the interface</h1>
+  <p>A gaze-driven interaction model for AR — prototyped with computer vision, designed for Meta Orion.</p>
+</section>
+
+<!-- ── Video (replaces logo section — autoplay, no controls) ─────────── -->
+<div class="video-block">
+  <video src="Materials_for_case_Meta/meta_video_view.mp4"
+         autoplay muted playsinline loop preload="metadata"></video>
+</div>
+
+<section class="case-intro">
+  <div><h2>Gaze Interaction</h2></div>
+  <div class="body-text">
+    <p>Designed and prototyped a gaze-driven interaction model for Meta Orion. Built a functional Python-based prototype using MediaPipe to test real-world eye-tracking latency and refine UX responsiveness.</p>
+  </div>
+</section>
+
+<div class="case-rows">
+
+  <div class="case-row">
+    <div class="case-row-label">The problem</div>
+    <div class="case-row-body">Most AR interfaces require active manual input, creating "interaction fatigue." For always-on devices like Orion, the challenge is to move away from active clicking toward passive, gaze-driven interaction. The goal is to close the gap between seeing and doing.</div>
+  </div>
+
+  <div class="case-row">
+    <div class="case-row-label">The Insight</div>
+    <div class="case-row-body">Attention is intent. In spatial computing, the first step of every action is looking. By measuring eye dwell time, we can interpret passive attention as active commitment, closing the gap between seeing an object and interacting with it.</div>
+  </div>
+
+  <div class="case-row">
+    <div class="case-row-label">The Solution</div>
+    <div class="case-row-body">Gaze-driven Navigation. A hands-free interaction model that eliminates the need for physical gestures. Four core actions — scroll, pause, save, and like — are triggered entirely by where the user looks, making the interface feel like an extension of thought.</div>
+  </div>
+
+  <div class="case-row">
+    <div class="case-row-label">The Engineering</div>
+    <div class="case-row-body">Building a functional Python pipeline using MediaPipe and OpenCV for real-time landmark tracking. The custom gaze-ratio algorithm features adaptive calibration, achieving high accuracy on a standard webcam without specialized hardware.</div>
+  </div>
+
+</div>
+
+<section class="block">
+  <h3 style="font-size:22px; font-weight:700; color:#111; margin-bottom:24px;">The Scroll Pattern: Natural Intent</h3>
+  <div class="grid-2" style="align-items:stretch;">
+    <video src="Materials_for_case_Meta/IMG_3812.MP4" autoplay muted playsinline loop preload="metadata" style="width:100%;border-radius:12px;display:block;"></video>
+    <div style="overflow:hidden;border-radius:12px;">
+      <img src="Materials_for_case_Meta/THXpoXQQJJf7QjcQWaefdZHi4.png.webp" alt="Meta Orion glasses" style="width:100%;height:100%;object-fit:cover;display:block;margin-top:0!important;">
+    </div>
+  </div>
+  <p style="margin-top:48px;">I replaced manual swiping with a "Intentional Closure" trigger.<br>
+  A deliberate eye closure acts as a navigation command, transforming a<br>
+  physiological reflex into a functional UI gesture for a 100% hands-free experience.</p>
+</section>
+
+<section class="block">
+  <video src="Materials_for_case_Meta/forcase_.mp4" autoplay muted playsinline loop preload="metadata" style="width:100%;border-radius:12px;"></video>
+  <p style="margin-top:24px;">By measuring the duration of gaze focus (dwell time), the system predicts<br>
+  user commitment, making navigation faster than a physical touch.</p>
+</section>
+
+<section class="block">
+  <h3 style="font-size:22px; font-weight:700; color:#111; margin-bottom:24px;">Accurate gaze amidst micro-movements</h3>
+  <img src="Materials_for_case_Meta/Group 1991425009.png" alt="AR night view" style="width:100%;border-radius:12px;display:block;">
+  <p style="margin-top:48px;">I developed a Python-based pipeline that calibrates gaze detection against<br>
+  the user's facial geometry. This approach implements Head-Motion<br>
+  Compensation by stabilizing the tracking relative to the bridge of the nose,<br>
+  separating intentional eye movements from natural, passive head drifts.</p>
+</section>
+
+<section id="try-section" class="block" style="text-align:center; padding: 160px 40px 180px;">
+  <h3 style="font-size:36px; font-weight:700; margin-bottom:16px; color:#111;">Try the Prototype</h3>
+  <p style="color:#555; margin-bottom:40px; max-width:480px; margin-left:auto; margin-right:auto;">Experience the gaze-driven interaction on your own device. Download the standalone executable or run it from the source.</p>
+  <div class="btn-row" style="display:flex; gap:48px; justify-content:center; margin-bottom:32px;">
+    <a id="btn-mac" class="dl-btn" href="https://pub-1c62b95833914db5b7a3cd0dabe5bd0f.r2.dev/meta-orion-macos.zip" download>
+      <div class="btn-fill" id="fill-mac"></div>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      <span>Download for macOS</span>
+    </a>
+    <a id="btn-win" class="dl-btn" href="https://pub-1c62b95833914db5b7a3cd0dabe5bd0f.r2.dev/meta-orion-windows.zip" download>
+      <div class="btn-fill" id="fill-win"></div>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1L20 13.25z"/></svg>
+      <span>Download for Windows</span>
+    </a>
+  </div>
+  <p style="color:#999; font-size:13px; margin: 0 auto 12px; text-align:center; display:block; width:100%;">Note: Requires a functional webcam for eye-tracking.</p>
+  <p style="color:#bbb; font-size:13px; white-space:normal; text-align:center; max-width:560px; margin-left:auto; margin-right:auto; display:block;">Requires Python 3 — don't have it?
+    <span id="btn-python" style="position:relative; display:inline-block; color:#2E5CE6; margin:0 3px;">
+      Download here
+      <span id="fill-python" style="position:absolute; bottom:-2px; left:0; height:2px; width:0%; background:#2E5CE6;"></span>
+    </span>
+    (2 min install), then double-click the file. Everything else installs automatically.
+  </p>
+</section>
+
+<section class="outro" id="outro">
+  <p class="outro-thanks">Keep exploring.</p>
+  <a class="outro-next" href="../LensAI/dist/index.html">
+    <span>Next</span>
+    <svg class="arr" viewBox="0 0 36 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 8h33M26 1l8 7-8 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h3>Contact</h3>
+      <a href="mailto:uxhurski@gmail.com">uxhurski@gmail.com<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+      <a href="tel:+48787603923">+48 787 603 923 <span class="note">(WhatsApp)</span><svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+    <div class="footer-col">
+      <h3>Photography</h3>
+      <a class="icon-link" href="https://www.instagram.com/ownthetalent/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>
+        ownthetalent
+      </a>
+    </div>
+    <div class="footer-col">
+      <h3>Design</h3>
+      <a href="https://www.linkedin.com/in/hurski/" target="_blank" rel="noopener">LinkedIn<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+    <div class="footer-col">
+      <h3>More</h3>
+      <a href="https://hurski.studio/" target="_blank" rel="noopener">Brand Portfolio<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Matt Hurski · Designed & coded by me</div>
+  <div class="footer-hurski">
+    <img class="hurski-text" src="../case_AI_Presence/HURSKI_nodot.svg" alt="HURSKI">
+    <img class="hurski-dot" src="../case_AI_Presence/symbol_for_footer.png" alt="·">
+  </div>
+</footer>
+
+<div class="page-curtain" id="pageCurtain"></div>
+
+<script>
+document.getElementById('backBtn').addEventListener('click', function() {
+  sessionStorage.setItem('introSeen', '1');
+  var curtain = document.getElementById('pageCurtain');
+  curtain.classList.add('on');
+  setTimeout(function() { window.location.href = '../index.html'; }, 480);
+});
+
+(function(){
+  var btn = document.getElementById('burgerBtn');
+  var menu = document.getElementById('mobMenu');
+  var close = document.getElementById('mobMenuClose');
+  if (!btn || !menu) return;
+  function openMenu() { menu.classList.add('open'); btn.classList.add('active'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { menu.classList.remove('open'); btn.classList.remove('active'); document.body.style.overflow = ''; }
+  btn.addEventListener('click', openMenu);
+  close.addEventListener('click', closeMenu);
+  menu.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+})();
+</script>
+</body>
+</html>

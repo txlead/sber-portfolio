@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/svg+xml" href="/symbol.png">
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Google Tasks — UX Redesign</title>
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { overscroll-behavior-y: none; max-width: 100%; overflow-x: hidden; }
+  body {
+    background: #ffffff;
+    color: #111;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  /* ── Case header ── */
+  .case-header {
+    position: relative;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 48px;
+    background: #fff;
+    border-bottom: none;
+  }
+  .case-header .ch-logo {
+    cursor: pointer; background: none; border: none; padding: 0;
+    display: flex; align-items: center;
+  }
+  .case-header .ch-logo img {
+    width: 52px; height: 52px;
+    animation: spin-slow 8s linear infinite;
+  }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .case-header .ch-logo:hover img { opacity: 0.7; }
+  .case-header nav { position: absolute; left: 50%; transform: translateX(-50%); }
+  .case-header nav a {
+    color: rgba(0,0,0,0.6); text-decoration: none;
+    font-size: 14px; font-weight: 400;
+  }
+  .case-header nav a:hover { opacity: 0.6; }
+  .case-header .ch-about {
+    color: rgba(0,0,0,0.6); text-decoration: none;
+    font-size: 14px; font-weight: 400;
+  }
+  .case-header .ch-about:hover { opacity: 0.6; }
+
+  /* ── Footer ── */
+  footer { background: #e8291c; color: #fff; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 64px 56px 32px; }
+  .footer-grid { max-width: 1320px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; padding-bottom: 40px; }
+  .footer-col h3 { font-size: 15px; font-weight: 500; margin-bottom: 14px; color: #fff; }
+  .footer-col a { display: block; color: #fff; text-decoration: none; font-size: 15px; margin-bottom: 8px; opacity: 0.9; transition: opacity .2s ease; position: relative; width: fit-content; }
+  .footer-col a:hover { opacity: 1; }
+  .footer-col a .draw-svg { position: absolute; bottom: -4px; left: 0; width: 100%; height: 7px; overflow: visible; pointer-events: none; }
+  .footer-col a .draw-svg path { fill: none; stroke: #fff; stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 115; stroke-dashoffset: 115; transition: stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1); }
+  .footer-col a:hover .draw-svg path { stroke-dashoffset: 0; }
+  .footer-col .note { opacity: 0.65; font-size: 13px; }
+  .footer-col a.icon-link { display: inline-flex; align-items: center; gap: 8px; }
+  .footer-col a.icon-link svg { width: 18px; height: 18px; flex: none; }
+  .footer-bottom { max-width: 1320px; margin: 0 auto; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.25); font-size: 14px; color: rgba(255,255,255,0.8); }
+  .footer-hurski { width: 100%; margin-top: 40px; line-height: 0; display: flex; align-items: flex-end; }
+  .footer-hurski .hurski-text { flex: 1; height: auto; display: block; min-width: 0; }
+  .footer-hurski .hurski-dot { flex-shrink: 0; width: 14%; aspect-ratio: 1; animation: spin-slow 8s linear infinite; margin-bottom: -0.5%; margin-left: -2%; }
+
+  /* ── Page curtain ── */
+  .page-curtain { position: fixed; left: 0; right: 0; bottom: 0; height: 100%; background: #fff; transform: translateY(100%); pointer-events: none; z-index: 9999; }
+
+  .hero {
+    height: 100vh;
+    display: flex;
+    align-items: center; justify-content: center;
+    padding-bottom: 12vh;
+  }
+  .hero-logo {
+    width: 240px; height: auto;
+    display: block;
+  }
+
+  .tagline-section {
+    height: 100vh;
+    display: flex;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 0 80px;
+    padding-bottom: 12vh;
+  }
+  .tagline-section p {
+    font-size: 26px; font-weight: 700;
+    color: #111;
+    line-height: 1.4;
+    max-width: 600px;
+  }
+  .tagline-section p span { color: #4285F4; }
+
+  .photo-block {
+    width: 100%;
+    background: #f0f0f0;
+    line-height: 0;
+    margin: 0; padding: 0;
+    display: block;
+  }
+  .photo-block img {
+    width: 100%; height: auto;
+    display: block;
+    object-fit: cover;
+    margin: 0; padding: 0;
+  }
+
+  .case-intro {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    padding: 60px 80px 60px;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .case-intro h2 {
+    font-size: 42px; font-weight: 400; line-height: 1.05;
+    letter-spacing: -0.015em;
+  }
+  .case-intro .body-text p { font-size: 15px; color: #333; margin-bottom: 0; line-height: 1.65; }
+
+  .case-rows {
+    max-width: 1400px; margin: 0 auto;
+    padding: 80px 80px 120px;
+    display: flex; flex-direction: column;
+    gap: 0;
+  }
+  .case-row {
+    display: grid; grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    padding: 32px 0;
+    border-top: 1px solid #e8e8e8;
+  }
+  .case-row:last-child { border-bottom: 1px solid #e8e8e8; }
+  .case-row-label {
+    font-size: 15px; font-weight: 400;
+    color: #4285F4;
+    padding-top: 2px;
+  }
+  .case-row-body {
+    font-size: 15px; color: #222;
+    line-height: 1.65; max-width: 680px;
+  }
+
+  section.block {
+    max-width: 1400px; margin: 0 auto;
+    padding: 60px 80px;
+  }
+  section.block h3 {
+    font-size: 32px; font-weight: 700; color: #111;
+    margin-bottom: 20px;
+  }
+  section.block p {
+    font-size: 18px; color: #222; max-width: 780px;
+    margin-bottom: 16px; line-height: 1.65;
+  }
+  section.block img {
+    width: 100%; height: auto;
+    border-radius: 16px;
+    margin-top: 32px;
+    display: block;
+  }
+
+  .before-after {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 40px;
+    align-items: start;
+  }
+  .before-after-col { display: flex; flex-direction: column; }
+  .before-after-col .ba-label {
+    font-size: 18px; font-weight: 700;
+    text-align: center;
+    margin-bottom: 16px;
+    letter-spacing: 0.04em;
+  }
+  .before-after-col img {
+    width: 100%; border-radius: 12px;
+    display: block; margin-top: 0;
+  }
+
+  .tags { display: none; }
+
+  /* ── Dark sections ─────────────────────────────────────────── */
+  .dark-section {
+    background: #07070f;
+    padding: 120px 80px;
+  }
+  .dark-section h3 {
+    font-size: 32px; font-weight: 700;
+    color: #fff;
+    margin-bottom: 48px;
+  }
+  .dark-section img.dark-photo {
+    width: 100%; border-radius: 16px; display: block;
+  }
+  #try-section {
+    background: #07070f;
+    text-align: center;
+    padding: 160px 40px 180px;
+  }
+  .dl-btn {
+    position: relative; overflow: hidden;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #4285F4; color: #fff;
+    text-decoration: none;
+    padding: 20px 56px;
+    border-radius: 16px;
+    font-size: 17px; font-weight: 600;
+    min-width: 240px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    z-index: 1;
+  }
+  .dl-btn span { position: relative; z-index: 2; pointer-events: none; }
+
+  /* ── Outro ── */
+  .outro { min-height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 80px; }
+  .outro-thanks { font-size: 48px; font-weight: 700; margin-bottom: 80px; }
+  .outro-next { display: inline-flex; align-items: center; gap: 16px; font-size: 32px; font-weight: 500; border: 1.5px solid currentColor; padding: 36px 80px; border-radius: 100px; position: relative; overflow: hidden; transition: color .4s ease; text-decoration: none; color: inherit; }
+  .outro-next::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: currentColor; transform: translateX(-100%); transition: transform .4s cubic-bezier(0.4,0,0.2,1); z-index: 0; }
+  .outro-next:hover::before { transform: translateX(0); }
+  .outro-next:hover { color: #fff; }
+  .outro-next span, .outro-next .arr { position: relative; z-index: 1; }
+  .outro-next .arr { width: 32px; height: 16px; display: inline-block; flex: none; }
+
+  @media (max-width: 900px) {
+    .case-intro { grid-template-columns: 1fr; gap: 32px; padding: 60px 24px 40px; }
+    .case-intro h2 { font-size: 32px; word-break: break-word; overflow-wrap: break-word; }
+    .case-rows { padding: 0 24px 80px; }
+    .case-row { grid-template-columns: 1fr; gap: 12px; }
+    .hero p { font-size: 18px; }
+    .before-after { grid-template-columns: 1fr; }
+    section.block { padding: 40px 24px; }
+  }
+
+  /* ── Burger menu ── */
+  .burger-btn { display: none; }
+  .mob-menu { position: fixed; inset: 0; background: #fff; z-index: 9000; flex-direction: column; align-items: center; justify-content: center; gap: 40px; opacity: 0; pointer-events: none; display: flex; transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1); }
+  .mob-menu.open { opacity: 1; pointer-events: all; }
+  .mob-menu a { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 32px; font-weight: 500; color: #0d0d0d; text-decoration: none; letter-spacing: -0.02em; transform: translateY(18px); opacity: 0; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .mob-menu.open a { transform: translateY(0); opacity: 1; }
+  .mob-menu.open a:nth-child(2) { transition-delay: 0.06s; }
+  .mob-menu.open a:nth-child(3) { transition-delay: 0.12s; }
+  .mob-menu.open a:nth-child(4) { transition-delay: 0.18s; }
+  .mob-menu.open a:nth-child(5) { transition-delay: 0.24s; }
+  .mob-menu-close { position: absolute; top: 12px; right: 20px; background: none; border: none; cursor: pointer; padding: 6px; opacity: 0; transform: rotate(-45deg); transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s; }
+  .mob-menu.open .mob-menu-close { opacity: 1; transform: rotate(0deg); }
+
+  @media (max-width: 700px) {
+    .case-header { padding: 12px 24px; }
+    .case-header .ch-logo img { width: 36px; height: 36px; }
+    .case-header nav, .case-header .ch-about { display: none; }
+    .burger-btn { display: flex; flex-direction: column; gap: 6px; background: none; border: none; cursor: pointer; padding: 6px; }
+    .burger-btn span { display: block; width: 24px; height: 1.5px; background: #111; border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease; }
+    .burger-btn.active span:nth-child(1) { transform: translateY(3.75px) rotate(45deg); }
+    .burger-btn.active span:nth-child(2) { transform: translateY(-3.75px) rotate(-45deg); }
+
+    .outro-thanks { font-size: 36px; line-height: 1.05; margin-bottom: 40px; }
+    .outro-next { font-size: 24px; padding: 28px 56px; width: 80%; justify-content: center; }
+    .hero-logo { width: 160px; }
+    .tagline-section { padding: 0 28px; padding-bottom: 12vh; }
+    .tagline-section p { font-size: 18px; line-height: 1.45; }
+    section.block h3 { font-size: 22px; }
+    section.block p { font-size: 15px; }
+    section.block img { max-height: none !important; width: 100% !important; margin-left: 0 !important; object-position: center !important; }
+    #img-4 { width: 65% !important; margin: 40px auto 0 !important; display: block !important; }
+    .dark-section { padding: 48px 24px; }
+    .dark-section h3 { font-size: 22px; margin-bottom: 24px; }
+    .dark-photo { max-width: 100% !important; }
+    #try-section { padding: 80px 24px !important; }
+    #try-section h3 { font-size: 26px !important; }
+    .dl-btn { min-width: 0; width: 100%; }
+    .outro-next { font-size: 24px; padding: 28px 56px; width: 80%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-curtain" id="pageCurtain"></div>
+
+<div class="mob-menu" id="mobMenu">
+  <button class="mob-menu-close" id="mobMenuClose" aria-label="Close menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="../about.html">About</a>
+  <a href="mailto:uxhurski@gmail.com">Contact</a>
+  <a href="https://hurski.studio/" target="_blank" rel="noopener">Brand Portfolio</a>
+</div>
+
+<header class="case-header" id="caseHeader">
+  <button class="ch-logo" id="backBtn"><img src="symbol.png" alt="Matt Hurski" /></button>
+  <nav><a href="../index.html">Home</a></nav>
+  <a class="ch-about" href="../about.html">About</a>
+  <button class="burger-btn" id="burgerBtn" aria-label="Open menu"><span></span><span></span></button>
+</header>
+
+<!-- Hero: logo only -->
+<section class="hero">
+  <img class="hero-logo" src="logo_google.png" alt="Google">
+</section>
+
+<!-- Tagline: separate screen -->
+<section class="tagline-section">
+  <p>Too much to do, too little time.<br>Let's make every task <span>manageable.</span></p>
+</section>
+
+<!-- Case intro -->
+<section class="case-intro">
+  <div><h2>Google Tasks Redesign</h2></div>
+  <div class="body-text">
+    <p>A comprehensive UX overhaul to bridge the gap between simplicity and power. By implementing Material Design 3, I optimized task organization for power users while maintaining a seamless, intuitive flow.</p>
+  </div>
+</section>
+
+<!-- Case rows -->
+<div class="case-rows">
+
+  <div class="case-row">
+    <div class="case-row-label">The problem</div>
+    <div class="case-row-body">Users struggle with limited sorting and rigid navigation, making the app inefficient for managing complex, multi-layered task lists.</div>
+  </div>
+
+  <div class="case-row">
+    <div class="case-row-label">The Solution</div>
+    <div class="case-row-body">Introduced smart filtering, a redesigned navigation drawer, and enhanced task entry modals to minimize cognitive load and speed up workflows.</div>
+  </div>
+
+  <div class="case-row">
+    <div class="case-row-label">The Impact</div>
+    <div class="case-row-body">Improved task discoverability by 40% (estimated) and created a scalable framework that accommodates both casual checklists and professional project tracking.</div>
+  </div>
+
+</div>
+
+<!-- Section 1: Optimizing the Home Screen -->
+<section class="block">
+  <h3>Optimizing the Home Screen</h3>
+  <p>Improving task discoverability through better hierarchy and quick-action filters.</p>
+  <img src="first_photo.jpg" alt="Optimizing the Home Screen" style="width:100%;border-radius:16px;display:block;margin-top:40px;">
+  <div style="display:none">
+    <div class="before-after-col">
+<img src="2photo.jpg" alt="Before: Home Screen">
+    </div>
+    <div class="before-after-col">
+<img src="3photo.jpg" alt="After: Home Screen">
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: Streamlined Navigation Drawer -->
+<section class="block">
+  <h3>Streamlined Navigation Drawer</h3>
+  <p>Transformed a flat list into a functional workspace with categorized smart views<br>and labels for faster task retrieval.</p>
+  <img src="2photo.jpg" alt="Streamlined Navigation Drawer" style="width:100%;max-height:620px;object-fit:contain;object-position:left;border-radius:16px;display:block;margin-top:40px;">
+</section>
+
+<!-- Section 3: Seamless Task Creation -->
+<section class="block">
+  <h3>Seamless Task Creation</h3>
+  <p>Expanded the quick-add entry to support detailed task configuration<br>without leaving the main screen.</p>
+  <img src="3photo.jpg" alt="Seamless Task Creation" style="width:100%;max-height:680px;object-fit:contain;border-radius:16px;display:block;margin-top:40px;">
+</section>
+
+<!-- Section 4: Task Organization -->
+<section class="block">
+  <h3>Task Organization</h3>
+  <p>Improved task scanning with visible sorting logic and color-coded labels<br>for better context and visual clarity.</p>
+  <img id="img-4" src="4photo.jpg" alt="Task Organization" style="width:45%;max-height:580px;object-fit:contain;border-radius:16px;display:block;margin-top:40px;margin-left:5%;">
+</section>
+
+<!-- Dark: High-Fidelity Design -->
+<section class="dark-section">
+  <h3>High-Fidelity Design</h3>
+  <img class="dark-photo" src="photofordark.png" alt="High-Fidelity Design" style="max-width:60%;margin:0 auto;display:block;border-radius:0;">
+</section>
+
+<!-- Dark: Try the Prototype -->
+<section id="try-section">
+  <h3 style="font-size:36px;font-weight:700;margin-bottom:16px;color:#fff;">Try the Prototype</h3>
+  <p style="color:rgba(255,255,255,0.4);margin-bottom:40px;font-size:16px;line-height:1.6;">Explore this interactive Figma prototype.</p>
+  <a id="btn-drive" class="dl-btn" href="https://www.figma.com/proto/2LJbTHkEWySm2qzvTlz6Hf/Google-Tasks?page-id=0%3A1&node-id=50-576&viewport=-2562%2C3981%2C0.53&t=yBDLdnItegvgLlZ3-1&scaling=contain&content-scaling=fixed&starting-point-node-id=50%3A688" target="_blank">
+    <span>Try Now</span>
+  </a>
+</section>
+
+<!-- Outro -->
+<section class="outro">
+  <p class="outro-thanks">Keep exploring.</p>
+  <a class="outro-next" href="https://pradecon.webflow.io" target="_blank" rel="noopener" id="nextBtn">
+    <span>Next</span>
+    <svg class="arr" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 8H30M30 8L23 1M30 8L23 15" stroke="currentColor" stroke-width="1.5"/></svg>
+  </a>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h3>Contact</h3>
+      <a href="mailto:uxhurski@gmail.com">uxhurski@gmail.com<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+      <a href="tel:+48787603923">+48 787 603 923 <span class="note">(WhatsApp)</span><svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+    <div class="footer-col">
+      <h3>Photography</h3>
+      <a class="icon-link" href="https://www.instagram.com/ownthetalent/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>
+        ownthetalent
+      </a>
+    </div>
+    <div class="footer-col">
+      <h3>Design</h3>
+      <a href="https://www.linkedin.com/in/hurski/" target="_blank" rel="noopener">LinkedIn<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+    <div class="footer-col">
+      <h3>More</h3>
+      <a href="https://hurski.studio/" target="_blank" rel="noopener">Brand Portfolio<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Matt Hurski · Designed & coded by me</div>
+  <div class="footer-hurski">
+    <img class="hurski-text" src="HURSKI_nodot.svg" alt="HURSKI" />
+    <img class="hurski-dot" src="symbol_for_footer.png" alt="" />
+  </div>
+</footer>
+
+<script>
+document.getElementById('backBtn').addEventListener('click', function() {
+  const curtain = document.getElementById('pageCurtain');
+  curtain.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+  curtain.style.transform = 'translateY(0)';
+  sessionStorage.setItem('introSeen', '1');
+  setTimeout(function() { window.location.href = '../index.html'; }, 500);
+});
+
+(function(){
+  var btn = document.getElementById('burgerBtn');
+  var menu = document.getElementById('mobMenu');
+  var close = document.getElementById('mobMenuClose');
+  if (!btn || !menu) return;
+  function openMenu() { menu.classList.add('open'); btn.classList.add('active'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { menu.classList.remove('open'); btn.classList.remove('active'); document.body.style.overflow = ''; }
+  btn.addEventListener('click', openMenu);
+  close.addEventListener('click', closeMenu);
+  menu.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+})();
+</script>
+</body>
+</html>

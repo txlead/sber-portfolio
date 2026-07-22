@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <link rel="icon" type="image/svg+xml" href="/symbol.png">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Matt Hurski</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #FCFDFF;
+    color: #0d0d0d;
+    font-family: 'DM Sans', Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ─────────────────────────────────────── */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+    /* border-bottom removed */
+  }
+
+  .logo {
+    display: flex; align-items: center;
+    text-decoration: none;
+  }
+  .logo img {
+    width: 52px; height: 52px;
+    animation: spin-slow 8s linear infinite;
+  }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .logo:hover img { opacity: 0.7; }
+
+  .header-center {
+    font-size: 15px;
+    font-weight: 400;
+    color: #111;
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .header-right {
+    font-size: 15px;
+    font-weight: 400;
+    color: #111;
+    text-decoration: none;
+  }
+
+  /* ── Draw-on underline ── */
+  .draw-link {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .draw-link .draw-svg {
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .draw-link .draw-svg path {
+    fill: none;
+    stroke: #111;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-dasharray: 115;
+    stroke-dashoffset: 115;
+    transition: stroke-dashoffset 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .draw-link:hover .draw-svg path {
+    stroke-dashoffset: 0;
+  }
+
+  .header-li {
+    display: flex;
+    align-items: center;
+    color: #111;
+    text-decoration: none;
+    transition: opacity .2s ease;
+  }
+
+  .header-li:hover { opacity: 0.4; }
+
+  /* ── ABOUT TEXT ─────────────────────────────────── */
+  .about-section {
+    padding: 22vh 48px 8vh;
+    max-width: 1200px;
+  }
+
+  .about-text {
+    font-size: clamp(28px, 4.2vw, 64px);
+    font-weight: 400;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+  }
+
+  .word {
+    display: inline;
+    color: #b0b0b0;
+    transition: color 0.45s ease;
+  }
+
+  .word.lit {
+    color: #0d0d0d;
+  }
+
+  .word.bold {
+    font-weight: 400;
+  }
+
+  /* ── Photo Sphere ───────────────────────────────── */
+  .gallery-3d-section {
+    width: 100%;
+    height: 92vh;
+    position: relative;
+    cursor: grab;
+    user-select: none;
+  }
+
+  /* Soft fade at top & bottom — no hard clip, no 3D flatten */
+  .gallery-3d-section::before,
+  .gallery-3d-section::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 130px;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .gallery-3d-section::before {
+    top: 0;
+    background: linear-gradient(to bottom, #FCFDFF 0%, transparent 100%);
+  }
+  .gallery-3d-section::after {
+    bottom: 0;
+    background: linear-gradient(to top, #FCFDFF 0%, transparent 100%);
+  }
+  .gallery-3d-section:active { cursor: grabbing; }
+
+  .gallery-3d-scene {
+    width: 100%;
+    height: 100%;
+    perspective: 1100px;
+    perspective-origin: 50% 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gallery-sphere {
+    position: relative;
+    width: 0;
+    height: 0;
+    transform-style: preserve-3d;
+  }
+
+  .g3d-card {
+    position: absolute;
+    overflow: hidden;
+    border-radius: 6px;
+    box-shadow: 0 4px 22px rgba(0,0,0,0.16);
+    will-change: transform;
+  }
+
+  .g3d-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+    draggable: false;
+  }
+
+  /* ── CONTACT SECTION ────────────────────────────── */
+  .contact-section {
+    padding: 12vh 48px 6vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    text-align: center;
+  }
+
+  .contact-email {
+    font-family: 'DM Sans', Helvetica, sans-serif;
+    font-size: clamp(40px, 9vw, 130px);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    color: #0d0d0d;
+    text-decoration: none;
+    line-height: 1;
+    transition: opacity 0.25s ease;
+  }
+
+  .contact-email:hover { opacity: 0.4; }
+
+  .ball-wrap {
+    width: clamp(80px, 10vw, 140px);
+    height: clamp(80px, 10vw, 140px);
+  }
+
+  .ball-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: ball-bounce 3.2s ease-in-out infinite;
+  }
+
+  @keyframes ball-bounce {
+    0%, 100% { transform: translateY(0)      rotate(0deg); }
+    50%       { transform: translateY(-10px) rotate(18deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ball-wrap img { animation: none; }
+  }
+
+  /* ── PAGE CURTAIN ───────────────────────────────── */
+  #page-curtain {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #000;
+    transform: translateY(0);
+    pointer-events: none;
+  }
+
+  /* ── FOOTER ─────────────────────────────────────── */
+  footer {
+    background: #e62a14;
+    color: #fff;
+    font-family: 'DM Sans', Helvetica, sans-serif;
+    padding: 64px 56px 32px;
+  }
+
+  .footer-grid {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+    padding-bottom: 40px;
+  }
+
+  .footer-col h3 {
+    font-family: 'DM Sans', Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+
+  .footer-col a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    margin-bottom: 8px;
+    opacity: 0.9;
+    transition: opacity .2s ease;
+    position: relative;
+    width: fit-content;
+  }
+
+  .footer-col a:hover { opacity: 1; }
+
+  .footer-col a .draw-svg {
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 7px;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .footer-col a .draw-svg path {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-dasharray: 115;
+    stroke-dashoffset: 115;
+    transition: stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .footer-col a:hover .draw-svg path {
+    stroke-dashoffset: 0;
+  }
+
+  .footer-col .note {
+    opacity: 0.65;
+    font-size: 13px;
+  }
+
+  .footer-col a.icon-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-col a.icon-link svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+  }
+
+  .footer-bottom {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.25);
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+  }
+
+  .footer-hurski {
+    width: 100%;
+    margin-top: 40px;
+    line-height: 0;
+    display: flex;
+    align-items: flex-end;
+  }
+  .footer-hurski .hurski-text {
+    flex: 1;
+    height: auto;
+    display: block;
+    min-width: 0;
+  }
+  .footer-hurski .hurski-dot {
+    flex-shrink: 0;
+    width: 14%;
+    aspect-ratio: 1;
+    animation: spin-slow 8s linear infinite;
+    margin-bottom: -0.5%;
+    margin-left: -2%;
+  }
+
+  /* ── MOBILE: HIDDEN GATE ──────────────────────────── */
+  .mobile-block,
+  .mobile-curtain {
+    display: none !important;
+  }
+
+  /* ── MOBILE BURGER ───────────────────────────────── */
+  .burger-btn { display: none; }
+
+  .mob-menu {
+    position: fixed;
+    inset: 0;
+    background: #FCFDFF;
+    z-index: 8000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .mob-menu.open { opacity: 1; pointer-events: all; }
+
+  .mob-menu a {
+    font-family: 'DM Sans', Helvetica, sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: #0d0d0d;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    position: relative;
+    transform: translateY(18px);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .mob-menu.open a { transform: translateY(0); opacity: 1; }
+  .mob-menu.open a:nth-child(2) { transition-delay: 0.06s; }
+  .mob-menu.open a:nth-child(3) { transition-delay: 0.12s; }
+  .mob-menu.open a:nth-child(4) { transition-delay: 0.18s; }
+  .mob-menu.open a:nth-child(5) { transition-delay: 0.24s; }
+
+  .mob-menu a::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -4px;
+    width: 100%; height: 3px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='3'%3E%3Cpath d='M0,1.5 Q7.5,0 15,1.5 Q22.5,3 30,1.5 Q37.5,0 45,1.5 Q52.5,3 60,1.5' fill='none' stroke='%230d0d0d' stroke-width='1.5'/%3E%3C/svg%3E") repeat-x center;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .mob-menu a:hover::after { transform: scaleX(1); }
+
+  .mob-menu-close {
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    background: none; border: none; cursor: pointer; padding: 6px;
+    opacity: 0;
+    transform: rotate(-45deg);
+    transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+  }
+  .mob-menu.open .mob-menu-close {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+
+  /* ── RESPONSIVE: MOBILE ───────────────────────────── */
+  @media (max-width: 700px) {
+    header { padding: 20px 20px; }
+    .header-center, .header-right { display: none; }
+    .logo img { width: 36px; height: 36px; }
+
+    .burger-btn {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: none; border: none; cursor: pointer; padding: 6px;
+      position: static;
+    }
+    .burger-btn span {
+      display: block;
+      width: 24px; height: 1.5px;
+      background: #0d0d0d;
+      border-radius: 2px;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+    }
+    .burger-btn.active span:nth-child(1) { transform: translateY(3.75px) rotate(45deg); }
+    .burger-btn.active span:nth-child(2) { transform: translateY(-3.75px) rotate(-45deg); }
+
+    /* About text */
+    .about-section { padding: 10vh 20px 6vh; }
+    .about-text { font-size: clamp(24px, 6.5vw, 38px); }
+
+    /* Photo sphere — smaller on mobile */
+    .gallery-3d-section { height: 40vh; overflow: hidden; }
+
+    /* Contact */
+    .contact-section { padding: 6vh 20px 4vh; gap: 24px; }
+    .contact-email { font-size: clamp(26px, 7vw, 46px); word-break: break-all; }
+
+    /* Footer */
+    footer { padding: 40px 20px 24px; }
+    .footer-grid { flex-direction: column; gap: 24px; padding-bottom: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="page-curtain"></div>
+
+<!-- Mobile: desktop-only notice -->
+<div class="mobile-block">
+  <div class="mb-code">
+    <span>4</span>
+    <span class="mb-ball"><img src="404/basketball.png" alt="Basketball"></span>
+    <span>4</span>
+  </div>
+  <p>This site is designed for desktop.<br>Please open it on your computer.</p>
+</div>
+<div class="mobile-curtain" id="mobileCurtain"></div>
+
+<!-- Mobile menu -->
+<div class="mob-menu" id="mobMenu">
+  <button class="mob-menu-close" id="mobMenuClose" aria-label="Close menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="index.html">Home</a>
+  <a href="#contact" id="mobContact">Contact</a>
+  <a href="https://hurski.studio/" target="_blank" rel="noopener">Brand Portfolio</a>
+</div>
+
+<!-- Header -->
+<header>
+  <a class="logo" href="index.html?skip"><img src="symbol.png" alt="Matt Hurski" /></a>
+  <button class="burger-btn" id="burgerBtn" aria-label="Open menu">
+    <span></span>
+    <span></span>
+  </button>
+  <a class="header-center draw-link" href="index.html?skip" style="color:#111;text-decoration:none;">Home
+    <svg class="draw-svg" viewBox="0 0 100 8" preserveAspectRatio="none"><path d="M0,5 Q25,1 50,5 Q75,9 100,5"/></svg>
+  </a>
+  <a class="header-right draw-link" href="#contact" style="text-decoration:none;">Contact Me
+    <svg class="draw-svg" viewBox="0 0 100 8" preserveAspectRatio="none"><path d="M0,5 Q20,2 50,5 Q80,8 100,4"/></svg>
+  </a>
+</header>
+
+<!-- About text -->
+<section class="about-section">
+  <p class="about-text" id="about-text"></p>
+</section>
+
+<!-- Photo Sphere -->
+<section class="gallery-3d-section" id="gallerySection">
+  <div class="gallery-3d-scene">
+    <div class="gallery-sphere" id="gallerySphere">
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="contact-section" id="contact">
+  <a class="contact-email" href="mailto:uxhurski@gmail.com">uxhurski@gmail.com</a>
+  <div class="ball-wrap">
+    <img src="404/basketball.png" alt="Basketball">
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h3>Contact</h3>
+      <a href="mailto:uxhurski@gmail.com">uxhurski@gmail.com<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+      <a href="tel:+48787603923">+48 787 603 923 <span class="note">(WhatsApp)</span><svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+    <div class="footer-col">
+      <h3>Photography</h3>
+      <a class="icon-link" href="https://www.instagram.com/ownthetalent/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>
+        ownthetalent
+      </a>
+    </div>
+    <div class="footer-col">
+      <h3>Design</h3>
+      <a href="https://www.linkedin.com/in/hurski/" target="_blank" rel="noopener">LinkedIn<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+    <div class="footer-col">
+      <h3>More</h3>
+      <a href="https://hurski.studio/" target="_blank" rel="noopener">Brand Portfolio<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+      <a href="404.html">Page (404)<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Matt Hurski · Designed & coded by me
+  </div>
+  <div class="footer-hurski">
+    <img class="hurski-text" src="HURSKI_nodot.svg" alt="HURSKI">
+    <img class="hurski-dot" src="symbol_for_footer.png" alt="·">
+  </div>
+</footer>
+
+<script>
+(function () {
+  var container = document.getElementById('about-text');
+
+  /* ── Text content ── */
+  var segments = [
+    { text: 'Worked', bold: true },
+    { text: ' alongside world-class seniors, product and dev teams, contributing to projects recognized by Awwwards.' },
+    { br: true },
+    { text: 'I\'m drawn to design work that blends craft with AI-powered workflows — turning complex ideas into interfaces that are clear, structured, and ready to ship.' },
+    { text: ' Looking for a designer who brings that same ownership and craft to UX/UI work?' },
+    { text: ' That\'s exactly what I bring.' }
+  ];
+
+  var allWords = [];
+
+  segments.forEach(function (seg) {
+    if (seg.br) { container.appendChild(document.createElement('br')); return; }
+    /* Split by spaces but keep the space as part of each token */
+    var tokens = seg.text.split(/(?<=[ \t\n\r\f\v])|(?=[ \t\n\r\f\v])/).filter(function(t){ return t.length > 0; });
+
+    tokens.forEach(function (token) {
+      var span = document.createElement('span');
+      span.className = 'word' + (seg.bold ? ' bold' : '');
+      span.textContent = token;
+      container.appendChild(span);
+      allWords.push(span);
+    });
+  });
+
+  /* ── Scroll reveal: word-by-word ── */
+  var section  = document.querySelector('.about-section');
+  var sectionTop = section.offsetTop;           /* px from doc top */
+  var viewH      = window.innerHeight;
+  /* reveal begins when section enters view; spread over section height + half viewport */
+  var startAt  = Math.max(0, sectionTop - viewH * 0.8);
+
+  function reveal() {
+    var scrollY  = window.scrollY || window.pageYOffset;
+    var range    = section.offsetHeight * 0.55;
+    var progress = Math.max(0, Math.min(1, (scrollY - startAt) / range));
+
+    /* always keep at least the first word lit */
+    var wordsToShow = Math.max(1, Math.round(progress * allWords.length));
+
+    allWords.forEach(function (w, i) {
+      if (i < wordsToShow) w.classList.add('lit');
+      else                 w.classList.remove('lit');
+    });
+  }
+
+  window.addEventListener('scroll', reveal, { passive: true });
+  reveal(); /* run once on load → shows only "Współpracowałem" */
+})();
+</script>
+
+<script>
+(function () {
+  var curtain = document.getElementById('page-curtain');
+  if (!curtain) return;
+
+  /* ── Enter: curtain slides UP on load ── */
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      curtain.style.transition = 'transform 1.05s cubic-bezier(0.76, 0, 0.24, 1)';
+      curtain.style.transform  = 'translateY(-100%)';
+      setTimeout(function () { curtain.style.display = 'none'; }, 1100);
+    });
+  });
+
+  /* ── Exit: curtain slides DOWN on navigation ── */
+  function navigateWithCurtain(href) {
+    curtain.style.display  = 'block';
+    curtain.style.transition = 'none';
+    curtain.style.transform  = 'translateY(-100%)';
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        curtain.style.transition = 'transform 0.85s cubic-bezier(0.76, 0, 0.24, 1)';
+        curtain.style.transform  = 'translateY(0)';
+        setTimeout(function () { window.location.href = href; }, 880);
+      });
+    });
+  }
+
+  document.querySelectorAll('a[href]').forEach(function (link) {
+    var href = link.getAttribute('href');
+    /* Only intercept internal page navigation (not anchors, not mailto/tel) */
+    if (!href || href.startsWith('#') || href.startsWith('mailto') || href.startsWith('tel')) return;
+    if (link.target === '_blank') return;
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      navigateWithCurtain(href);
+    });
+  });
+})();
+</script>
+
+<script>
+/* ── Mobile curtain ── */
+(function () {
+  if (!window.matchMedia('(max-width: 700px)').matches) return;
+  var curtain = document.getElementById('mobileCurtain');
+  if (!curtain) return;
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      curtain.style.transition = 'transform 1.05s cubic-bezier(0.76, 0, 0.24, 1)';
+      curtain.style.transform  = 'translateY(-100%)';
+      setTimeout(function () { curtain.remove(); }, 1100);
+    });
+  });
+})();
+</script>
+
+<script>
+/* ── Photo Sphere ── */
+(function () {
+  var sphere  = document.getElementById('gallerySphere');
+  var section = document.getElementById('gallerySection');
+  if (!sphere || !section) return;
+
+  var IMGS = [
+    'для_круто_карусели/IMAGE%202026-06-16%2019:06:11.jpg',
+    'для_круто_карусели/IMAGE%202026-06-16%2019:06:12.jpg',
+    'для_круто_карусели/IMAGE%202026-06-16%2019:06:13.jpg',
+    'для_круто_карусели/IMAGE%202026-06-16%2019:06:14.jpg',
+    'для_круто_карусели/IMAGE%202026-06-16%2019:06:16.jpg',
+    'для_круто_карусели/IMAGE%202026-06-16%2019:06:17.jpg',
+    'для_круто_карусели/IMAGE%202026-06-16%2019:06:18.jpg',
+    'для_круто_карусели/IMAGE%202026-06-16%2019:06:20.jpg',
+    'для_круто_карусели/IMAGE%202026-06-16%2019:06:22.jpg',
+    'для_круто_карусели/IMAGE%202026-06-16%2019:06:24.jpg',
+    'для_круто_карусели/IMAGE%202026-06-16%2019:06:26.jpg',
+    'для_круто_карусели/IMAGE%202026-06-16%2019:07:05.jpg'
+  ];
+
+  /* Duplicate images for denser sphere */
+  var allImgs = IMGS.concat(IMGS);
+  var N = allImgs.length; /* 24 */
+  var isMob = window.innerWidth <= 700;
+  var R  = isMob ? 160 : 320;
+  var CW = isMob ? 80  : 160;
+  var CH = isMob ? 52  : 104;
+  var DEG = 180 / Math.PI;
+  var PHI = Math.PI * (3 - Math.sqrt(5)); /* golden angle */
+
+  /* Build cards using Fibonacci sphere distribution */
+  allImgs.forEach(function (src, i) {
+    var t     = i / (N - 1);
+    var y     = 1 - t * 2;
+    var r     = Math.sqrt(Math.max(0, 1 - y * y));
+    var theta = PHI * i;
+    var x     = Math.cos(theta) * r;
+    var z     = Math.sin(theta) * r;
+
+    var lon = Math.atan2(x, z) * DEG;
+    var lat = Math.asin(Math.min(1, Math.max(-1, y))) * DEG;
+
+    var card = document.createElement('div');
+    card.className = 'g3d-card';
+    card.style.width  = CW + 'px';
+    card.style.height = CH + 'px';
+    card.style.marginLeft = (-CW / 2) + 'px';
+    card.style.marginTop  = (-CH / 2) + 'px';
+    card.style.transform  =
+      'rotateY(' + lon + 'deg) rotateX(' + (-lat) + 'deg) translateZ(' + R + 'px)';
+
+    var img = document.createElement('img');
+    img.src = src;
+    img.alt = '';
+    img.draggable = false;
+    card.appendChild(img);
+    sphere.appendChild(card);
+  });
+
+  /* ── Rotation state ── */
+  var rotX = 18, rotY = 0;
+  var velX = 0, velY = 0;
+  var isDragging = false;
+  var lastMX, lastMY;
+  var autoOn = true;
+  var raf;
+
+  function apply() {
+    sphere.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+  }
+  apply();
+
+  /* ── Auto-rotate ── */
+  function autoLoop() {
+    if (!autoOn || isDragging) return;
+    rotY += 0.18;
+    apply();
+    raf = requestAnimationFrame(autoLoop);
+  }
+  raf = requestAnimationFrame(autoLoop);
+
+  /* ── Inertia after drag ── */
+  function inertiaLoop() {
+    velX *= 0.93;
+    velY *= 0.93;
+    rotY += velX * 0.28;
+    rotX  = Math.max(-75, Math.min(75, rotX - velY * 0.28));
+    apply();
+    if (Math.abs(velX) < 0.05 && Math.abs(velY) < 0.05) {
+      autoOn = true;
+      raf = requestAnimationFrame(autoLoop);
+    } else {
+      raf = requestAnimationFrame(inertiaLoop);
+    }
+  }
+
+  /* ── Mouse drag ── */
+  section.addEventListener('mousedown', function (e) {
+    isDragging = true;
+    autoOn = false;
+    cancelAnimationFrame(raf);
+    lastMX = e.clientX;
+    lastMY = e.clientY;
+    velX = velY = 0;
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', function (e) {
+    if (!isDragging) return;
+    var dx = e.clientX - lastMX;
+    var dy = e.clientY - lastMY;
+    velX = dx; velY = dy;
+    rotY += dx * 0.38;
+    rotX  = Math.max(-75, Math.min(75, rotX - dy * 0.38));
+    apply();
+    lastMX = e.clientX;
+    lastMY = e.clientY;
+  });
+
+  window.addEventListener('mouseup', function () {
+    if (!isDragging) return;
+    isDragging = false;
+    raf = requestAnimationFrame(inertiaLoop);
+  });
+
+  /* ── Touch support ── */
+  section.addEventListener('touchstart', function (e) {
+    isDragging = true;
+    autoOn = false;
+    cancelAnimationFrame(raf);
+    lastMX = e.touches[0].clientX;
+    lastMY = e.touches[0].clientY;
+    velX = velY = 0;
+  }, { passive: true });
+
+  window.addEventListener('touchmove', function (e) {
+    if (!isDragging) return;
+    var dx = e.touches[0].clientX - lastMX;
+    var dy = e.touches[0].clientY - lastMY;
+    velX = dx; velY = dy;
+    rotY += dx * 0.38;
+    rotX  = Math.max(-75, Math.min(75, rotX - dy * 0.38));
+    apply();
+    lastMX = e.touches[0].clientX;
+    lastMY = e.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener('touchend', function () {
+    if (!isDragging) return;
+    isDragging = false;
+    raf = requestAnimationFrame(inertiaLoop);
+  });
+})();
+</script>
+
+<script>
+(function () {
+  var btn   = document.getElementById('burgerBtn');
+  var menu  = document.getElementById('mobMenu');
+  var close = document.getElementById('mobMenuClose');
+  if (!btn || !menu) return;
+  function openMenu()  { menu.classList.add('open'); btn.classList.add('active'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { menu.classList.remove('open'); btn.classList.remove('active'); document.body.style.overflow = ''; }
+  btn.addEventListener('click', openMenu);
+  close.addEventListener('click', closeMenu);
+  menu.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+})();
+</script>
+
+</body>
+</html>

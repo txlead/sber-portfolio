@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/svg+xml" href="/symbol.png">
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Therapeutic Immersion — Matthew Hurski</title>
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { overscroll-behavior-y: none; }
+  body {
+    background: #07070f;
+    color: #fff;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+
+  /* ── Case header ── */
+  .case-header {
+    position: relative;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 48px;
+    background: #07070f;
+    border-bottom: none;
+  }
+  .case-header .ch-logo {
+    cursor: pointer; background: none; border: none; padding: 0;
+    display: flex; align-items: center;
+  }
+  .case-header .ch-logo img {
+    width: 52px; height: 52px;
+    animation: spin-slow 8s linear infinite;
+    will-change: transform;
+  }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .case-header .ch-logo:hover img { opacity: 0.7; }
+  .case-header nav { position: absolute; left: 50%; transform: translateX(-50%); }
+  .case-header nav a {
+    color: rgba(255,255,255,0.7); text-decoration: none;
+    font-size: 14px; font-weight: 400;
+  }
+  .case-header nav a:hover { opacity: 0.6; }
+  .case-header .ch-about {
+    color: rgba(255,255,255,0.7); text-decoration: none;
+    font-size: 14px; font-weight: 400;
+  }
+  .case-header .ch-about:hover { opacity: 0.6; }
+
+  .video-block {
+    width: 100%;
+    background: #111;
+    line-height: 0;
+    margin: 0; padding: 0;
+    display: block;
+  }
+  .video-block video {
+    width: 100%; height: auto;
+    display: block;
+    margin: 0; padding: 0;
+    will-change: auto;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 0 80px;
+    margin-bottom: 0;
+  }
+  .hero h1 {
+    font-size: 44px; font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 24px;
+    color: #fff;
+  }
+  .hero p {
+    font-size: 17px; color: rgba(255,255,255,0.45);
+    width: 100%; max-width: 100%;
+    line-height: 1.6;
+  }
+
+  .logo-section {
+    min-height: 80vh;
+    background: #0d0d0d;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-section svg { width: 120px; height: auto; }
+
+  .case-intro {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    padding: 160px 80px 80px;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .case-intro h2 {
+    font-size: 64px; font-weight: 400; line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: #fff;
+  }
+  .case-intro .body-text p { font-size: 15px; color: rgba(255,255,255,0.55); margin-bottom: 0; line-height: 1.65; }
+
+  .case-rows {
+    max-width: 1400px; margin: 0 auto;
+    padding: 80px 80px 120px;
+    display: flex; flex-direction: column;
+    gap: 0;
+  }
+  .case-row {
+    display: grid; grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    padding: 32px 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .case-row:last-child { border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .case-row-label {
+    font-size: 15px; font-weight: 400;
+    color: rgba(255,255,255,0.3);
+    padding-top: 2px;
+  }
+  .case-row-body {
+    font-size: 15px; color: rgba(255,255,255,0.6);
+    line-height: 1.65; max-width: 680px;
+  }
+
+  section.block {
+    max-width: 1400px; margin: 0 auto;
+    padding: 60px 80px;
+  }
+  section.block h3 {
+    font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.3);
+    margin-bottom: 18px;
+  }
+  section.block p {
+    font-size: 15px; color: rgba(255,255,255,0.55); max-width: 680px;
+    margin-bottom: 16px; line-height: 1.65;
+  }
+  section.block img {
+    width: 100%; height: auto;
+    border-radius: 16px;
+    margin-top: 32px;
+    display: block;
+  }
+  .grid-2 {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    margin-top: 32px;
+  }
+  .grid-2 img { margin-top: 0; }
+
+  .tags { display: none; }
+
+  /* ── Outro ── */
+  .outro { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #07070f; padding: 100px 80px; }
+  .outro-thanks { font-size: 48px; font-weight: 700; color: #fff; margin-bottom: 80px; margin-top: -40px; }
+  .outro-next { display: inline-flex; align-items: center; gap: 16px; font-size: 32px; font-weight: 500; color: #fff; border: 1.5px solid #fff; padding: 36px 80px; border-radius: 100px; position: relative; overflow: hidden; transition: color .4s ease; }
+  .outro-next::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff; transform: translateX(-100%); transition: transform .4s cubic-bezier(0.4,0,0.2,1); z-index: 0; }
+  .outro-next:hover::before { transform: translateX(0); }
+  .outro-next:hover { color: #07070f; }
+  .outro-next span, .outro-next .arr { position: relative; z-index: 1; }
+  .outro-next .arr { width: 32px; height: 16px; display: inline-block; flex: none; }
+
+  /* ── Footer ── */
+  footer { background: #e8291c; color: #fff; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 64px 56px 32px; }
+  .footer-grid { max-width: 1320px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; padding-bottom: 40px; }
+  .footer-col h3 { font-size: 15px; font-weight: 500; margin-bottom: 14px; color: #fff; }
+  .footer-col a { display: block; color: #fff; text-decoration: none; font-size: 15px; margin-bottom: 8px; opacity: 0.9; transition: opacity .2s ease; position: relative; width: fit-content; }
+  .footer-col a:hover { opacity: 1; }
+  .footer-col a .draw-svg { position: absolute; bottom: -4px; left: 0; width: 100%; height: 7px; overflow: visible; pointer-events: none; }
+  .footer-col a .draw-svg path { fill: none; stroke: #fff; stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 115; stroke-dashoffset: 115; transition: stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1); }
+  .footer-col a:hover .draw-svg path { stroke-dashoffset: 0; }
+  .footer-col .note { opacity: 0.65; font-size: 13px; }
+  .footer-col a.icon-link { display: inline-flex; align-items: center; gap: 8px; }
+  .footer-col a.icon-link svg { width: 18px; height: 18px; flex: none; }
+  .footer-bottom { max-width: 1320px; margin: 0 auto; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.25); font-size: 14px; color: rgba(255,255,255,0.8); }
+  .footer-hurski { width: 100%; margin-top: 40px; line-height: 0; display: flex; align-items: flex-end; }
+  .footer-hurski .hurski-text { flex: 1; height: auto; display: block; min-width: 0; }
+  .footer-hurski .hurski-dot { flex-shrink: 0; width: 14%; aspect-ratio: 1; animation: spin-slow 8s linear infinite; will-change: transform; margin-bottom: -0.5%; margin-left: -2%; }
+
+  /* ── Project button ── */
+  .dl-btn {
+    position: relative; overflow: hidden;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #2E5CE6; color: #fff;
+    text-decoration: none;
+    padding: 18px 56px;
+    border-radius: 14px;
+    font-size: 15px; font-weight: 500;
+    min-width: 260px;
+  }
+  .dl-btn span { position: relative; z-index: 1; }
+  .dl-btn::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(255,255,255,0.18);
+    transform: translateX(-100%);
+    transition: transform .4s cubic-bezier(0.4,0,0.2,1);
+    z-index: 0;
+  }
+  @media (hover: hover) {
+    .dl-btn:hover::before { transform: translateX(0); }
+  }
+
+  /* ── Page curtain ── */
+  .page-curtain { position: fixed; left: 0; right: 0; bottom: 0; height: 100%; background: #111; transform: translateY(100%); pointer-events: none; z-index: 9999; }
+
+
+  /* ── Burger menu ── */
+  .burger-btn { display: none; }
+  .mob-menu { position: fixed; inset: 0; background: #fff; z-index: 9000; flex-direction: column; align-items: center; justify-content: center; gap: 40px; opacity: 0; pointer-events: none; display: flex; transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1); }
+  .mob-menu.open { opacity: 1; pointer-events: all; }
+  .mob-menu a { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 32px; font-weight: 500; color: #0d0d0d; text-decoration: none; letter-spacing: -0.02em; transform: translateY(18px); opacity: 0; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .mob-menu.open a { transform: translateY(0); opacity: 1; }
+  .mob-menu.open a:nth-child(2) { transition-delay: 0.06s; }
+  .mob-menu.open a:nth-child(3) { transition-delay: 0.12s; }
+  .mob-menu.open a:nth-child(4) { transition-delay: 0.18s; }
+  .mob-menu.open a:nth-child(5) { transition-delay: 0.24s; }
+  .mob-menu-close { position: absolute; top: 12px; right: 20px; background: none; border: none; cursor: pointer; padding: 6px; opacity: 0; transform: rotate(-45deg); transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s; }
+  .mob-menu.open .mob-menu-close { opacity: 1; transform: rotate(0deg); }
+
+  @media (max-width: 700px) {
+    .case-header { padding: 12px 24px; }
+    .case-header .ch-logo img { width: 36px; height: 36px; }
+    .case-header nav, .case-header .ch-about { display: none; }
+    .burger-btn { display: flex; flex-direction: column; gap: 6px; background: none; border: none; cursor: pointer; padding: 6px; }
+    .burger-btn span { display: block; width: 24px; height: 1.5px; background: rgba(255,255,255,0.9); border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease; }
+    .burger-btn.active span:nth-child(1) { transform: translateY(3.75px) rotate(45deg); }
+    .burger-btn.active span:nth-child(2) { transform: translateY(-3.75px) rotate(-45deg); }
+
+    .case-row-label { color: #fff; }
+    .hero h1 { font-size: clamp(22px, 6vw, 36px); white-space: normal; letter-spacing: -0.02em; }
+    .hero { padding: 0 24px; }
+    p br { display: none; }
+    #try-section { padding: 80px 24px 80px !important; }
+    .dl-btn { min-width: 0; width: 100%; }
+    .hero p { font-size: 14px; }
+    .outro { padding: 60px 24px; }
+    .outro-thanks { font-size: 36px; line-height: 1.05; margin-bottom: 32px; }
+    .outro-next { font-size: 24px; padding: 28px 56px; width: 80%; justify-content: center; }
+    footer { padding: 48px 24px 32px; }
+    .footer-grid { flex-direction: column; gap: 24px; padding-bottom: 24px; }
+  }
+  @media (max-width: 900px) {
+    .case-intro { grid-template-columns: 1fr; gap: 32px; padding: 60px 24px 40px; }
+    .case-intro h2 { font-size: 42px; }
+    .case-rows { padding: 0 24px 80px; }
+    .case-row { grid-template-columns: 1fr; gap: 12px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    section.block { padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-curtain" id="pageCurtain"></div>
+
+<div class="mob-menu" id="mobMenu">
+  <button class="mob-menu-close" id="mobMenuClose" aria-label="Close menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="../about.html">About</a>
+  <a href="mailto:uxhurski@gmail.com">Contact</a>
+  <a href="https://hurski.studio/" target="_blank" rel="noopener">Brand Portfolio</a>
+</div>
+
+<header class="case-header" id="caseHeader">
+  <button class="ch-logo" id="backBtn"><img src="symbol_for_case_innorehab.png" alt="Matt Hurski" /></button>
+  <nav><a href="../index.html">Home</a></nav>
+  <a class="ch-about" href="../about.html">About</a>
+  <button class="burger-btn" id="burgerBtn" aria-label="Open menu"><span></span><span></span></button>
+</header>
+
+<section class="hero">
+  <h1>Therapeutic Immersion</h1>
+  <p>A VR rehabilitation framework built on Unreal Engine, focusing on high-fidelity object interaction and motor skill recovery.</p>
+</section>
+
+<div class="video-block" style="overflow:hidden; line-height:0;">
+  <video src="video_.mp4" autoplay muted playsinline loop preload="metadata" style="display:block; width:100%; margin-top:-8%; margin-bottom:-2%;"></video>
+</div>
+
+<section class="case-intro">
+  <div><h2>VR Rehabilitation</h2></div>
+  <div class="body-text">
+    <p>Designed and prototyped a VR rehabilitation framework using Unreal Engine 5. Built a real-time interaction system that adapts to patient motor responses, reducing cognitive overload while maximising therapeutic engagement.</p>
+  </div>
+</section>
+
+<div class="case-rows">
+
+  <div class="case-row">
+    <div class="case-row-label">The problem</div>
+    <div class="case-row-body">Traditional rehabilitation is repetitive and disengaging. Patients lose motivation, drop out early, and recovery stalls — especially when feedback on movement quality is delayed or unclear.</div>
+  </div>
+
+  <div class="case-row">
+    <div class="case-row-label">The Insight</div>
+    <div class="case-row-body">When the environment responds intelligently to every movement, exercise stops feeling like therapy. Real-time physics feedback creates a sense of agency that sustains engagement and accelerates neuromotor learning.</div>
+  </div>
+
+  <div class="case-row">
+    <div class="case-row-label">The Solution</div>
+    <div class="case-row-body">Implemented intuitive visual and haptic cues to guide patients through complex motor exercises without cognitive overload. Every grasp, release, and weight shift measured and responded to in under 16ms.</div>
+  </div>
+
+  <div class="case-row">
+    <div class="case-row-label">The Engineering</div>
+    <div class="case-row-body">Built in Unreal Engine 5 with custom Blueprints for adaptive difficulty scaling. Haptic feedback synchronised to physics events. Session data logged per-frame for clinician review.</div>
+  </div>
+
+</div>
+
+<section class="block">
+  <h3 style="font-size:22px; font-weight:700; color:#fff; margin-bottom:56px;">High-fidelity object interaction</h3>
+  <video src="FILE 2026-04-18 21:57:46.mp4" autoplay muted playsinline loop preload="metadata" style="width:100%;border-radius:12px;display:block;margin-top:0;"></video>
+  <p style="margin-top:48px;">Every object in the environment carries realistic mass, friction, and collision response. Patients learn to recalibrate grip strength and timing through immediate physical consequence — not instruction.</p>
+</section>
+
+<section id="try-section" class="block" style="text-align:center; padding: 160px 40px 180px;">
+  <h3 style="font-size:36px; font-weight:700; margin-bottom:16px; color:#fff;">Try the Prototype</h3>
+  <p style="color:rgba(255,255,255,0.4); margin-bottom:40px; max-width:560px; white-space:normal; margin-left:auto; margin-right:auto;">Open the project in Google Drive — all materials and source files are available via the link.</p>
+  <a id="btn-drive" class="dl-btn" href="https://drive.google.com/drive/folders/1NJydnBuVr-TI_d0eRj7zUyo4iizYN4kQ?usp=sharing" target="_blank">
+    <span>Open Project</span>
+  </a>
+</section>
+
+<section class="outro">
+  <p class="outro-thanks">Keep exploring.</p>
+  <a class="outro-next" href="../Google_case/case_google.html" id="nextBtn">
+    <span>Next</span>
+    <svg class="arr" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 8H30M30 8L23 1M30 8L23 15" stroke="currentColor" stroke-width="1.5"/></svg>
+  </a>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h3>Contact</h3>
+      <a href="mailto:uxhurski@gmail.com">uxhurski@gmail.com<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+      <a href="tel:+48787603923">+48 787 603 923 <span class="note">(WhatsApp)</span><svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+    <div class="footer-col">
+      <h3>Photography</h3>
+      <a class="icon-link" href="https://www.instagram.com/ownthetalent/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>
+        ownthetalent
+      </a>
+    </div>
+    <div class="footer-col">
+      <h3>Design</h3>
+      <a href="https://www.linkedin.com/in/hurski/" target="_blank" rel="noopener">LinkedIn<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+    <div class="footer-col">
+      <h3>More</h3>
+      <a href="https://hurski.studio/" target="_blank" rel="noopener">Brand Portfolio<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Matt Hurski · Designed & coded by me</div>
+  <div class="footer-hurski">
+    <img class="hurski-text" src="HURSKI_nodot.svg" alt="HURSKI" />
+    <img class="hurski-dot" src="symbol_for_footer.png" alt="" />
+  </div>
+</footer>
+
+<script>
+document.getElementById('backBtn').addEventListener('click', function() {
+  const curtain = document.getElementById('pageCurtain');
+  curtain.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+  curtain.style.transform = 'translateY(0)';
+  sessionStorage.setItem('introSeen', '1');
+  setTimeout(function() { window.location.href = '../index.html'; }, 500);
+});
+
+(function(){
+  var btn = document.getElementById('burgerBtn');
+  var menu = document.getElementById('mobMenu');
+  var close = document.getElementById('mobMenuClose');
+  if (!btn || !menu) return;
+  function openMenu() { menu.classList.add('open'); btn.classList.add('active'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { menu.classList.remove('open'); btn.classList.remove('active'); document.body.style.overflow = ''; }
+  btn.addEventListener('click', openMenu);
+  close.addEventListener('click', closeMenu);
+  menu.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+})();
+</script>
+</body>
+</html>

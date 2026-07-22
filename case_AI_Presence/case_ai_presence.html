@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/svg+xml" href="/symbol.png">
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meta — AI Presence</title>
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #ffffff;
+    color: #111;
+    font-family: -apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+
+  /* ── Case header ──────────────────────────────────────────────────────── */
+  .case-header {
+    position: relative;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 48px;
+    background: #fff;
+    border-bottom: none;
+  }
+  .case-header .ch-logo {
+    cursor: pointer; background: none; border: none; padding: 0;
+    display: flex; align-items: center;
+  }
+  .case-header .ch-logo img {
+    width: 52px; height: 52px;
+    animation: spin-slow 8s linear infinite;
+  }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .case-header .ch-logo:hover img { opacity: 0.7; }
+  .case-header nav { position: absolute; left: 50%; transform: translateX(-50%); }
+  .case-header nav a {
+    color: #111; text-decoration: none;
+    font-family: -apple-system, 'SF Pro Text', BlinkMacSystemFont, sans-serif;
+    font-size: 14px; font-weight: 400;
+  }
+  .case-header nav a:hover { opacity: 0.6; }
+  .case-header .ch-about {
+    color: #111; text-decoration: none;
+    font-size: 14px; font-weight: 400;
+  }
+  .case-header .ch-about:hover { opacity: 0.6; }
+
+  /* ── Hero ────────────────────────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 80px 80px 120px;
+    margin-bottom: 0;
+    background: url('effectforsite.png') center top / cover no-repeat #ffffff;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero h1 {
+    font-family: -apple-system, 'SF Pro Display', BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    font-size: 52px; font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+    white-space: nowrap;
+    position: relative; z-index: 1;
+  }
+  .hero p {
+    font-family: -apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    font-size: 17px; color: #444; font-weight: 400;
+    white-space: nowrap;
+    line-height: 1.55;
+    position: relative; z-index: 1;
+  }
+
+  /* ── Statement ───────────────────────────────────────────────────────── */
+  .statement {
+    min-height: 60vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 160px 80px;
+    text-align: center;
+  }
+  .statement p {
+    font-size: 26px; font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    max-width: 700px;
+    color: #111;
+  }
+  .statement p span { color: #2E5CE6; }
+
+  /* ── Video block ─────────────────────────────────────────────────────── */
+  .video-block {
+    width: 100%; background: #ffffff;
+    line-height: 0; margin: 0; padding: 100px 80px 80px;
+  }
+  .video-block video {
+    width: 100%; height: auto;
+    display: block;
+    border-radius: 0;
+    object-fit: fill;
+  }
+
+  /* ── Case intro ──────────────────────────────────────────────────────── */
+  .case-intro {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    padding: 100px 80px 80px;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .case-intro h2 {
+    font-size: 64px; font-weight: 400; line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+  .case-intro .body-text {
+    padding-top: 20px;
+  }
+  .case-intro .body-text p {
+    font-size: 15px; color: #333; line-height: 1.65;
+  }
+
+  /* ── Structured rows ─────────────────────────────────────────────────── */
+  .case-rows {
+    max-width: 1400px; margin: 0 auto;
+    padding: 80px 80px 100px;
+    display: flex; flex-direction: column;
+  }
+  .case-row {
+    display: grid; grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    padding: 36px 0;
+    border-top: 1px solid #e8e8e8;
+  }
+  .case-row:last-child { border-bottom: 1px solid #e8e8e8; }
+  .case-row-label {
+    font-size: 15px; font-weight: 400;
+    color: #2E5CE6;
+    padding-top: 2px;
+  }
+  .case-row-body {
+    font-size: 15px; color: #222;
+    line-height: 1.7; max-width: 680px;
+  }
+  .case-row-body ul {
+    list-style: none; padding: 0; margin: 0;
+  }
+  .case-row-body ul li {
+    padding-left: 18px; position: relative; margin-bottom: 6px;
+  }
+  .case-row-body ul li::before {
+    content: '·'; position: absolute; left: 0; color: #2E5CE6; font-weight: 700;
+  }
+
+  /* ── Feature blocks ──────────────────────────────────────────────────── */
+  /* Text part — always white */
+  .feat-text {
+    background: #fff;
+    padding: 80px 80px 40px;
+    text-align: center;
+  }
+  .feat-text h3 {
+    font-family: -apple-system, 'SF Pro Display', BlinkMacSystemFont, sans-serif;
+    font-size: 22px; font-weight: 600;
+    color: #2E5CE6; margin-bottom: 14px;
+  }
+  .feat-text p {
+    font-size: 15px; color: #555; line-height: 1.6;
+    white-space: nowrap; margin: 0 auto;
+  }
+  /* Photos part — tinted or white, full viewport width, no side gaps */
+  .feat-phones {
+    padding: 40px 0 40px;   /* 0 sides so bg goes edge-to-edge */
+    text-align: center;
+    background: #fff;
+  }
+  .feat-phones.tinted { background: #F4FAFF; }
+  /* Full-width mockup image */
+  .feat-phones img {
+    max-width: 1300px;
+    width: 92%; height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 0;
+  }
+
+
+  .page-curtain {
+    position: fixed; left: 0; right: 0;
+    bottom: 0; height: 100%;
+    background: #111;
+    transform: translateY(100%);
+    pointer-events: none;
+    transition: transform .6s cubic-bezier(0.76, 0, 0.24, 1);
+    z-index: 9999;
+  }
+  .page-curtain.on { transform: translateY(0); pointer-events: all; }
+
+  /* ── Footer nav ──────────────────────────────────────────────────────── */
+  .footer-nav {
+    padding: 100px 40px 140px;
+    text-align: center;
+    color: #888; font-size: 14px;
+  }
+  .footer-nav strong { color: #111; }
+
+
+  /* ── Burger menu ── */
+  .burger-btn { display: none; }
+  .mob-menu { position: fixed; inset: 0; background: #fff; z-index: 9000; flex-direction: column; align-items: center; justify-content: center; gap: 40px; opacity: 0; pointer-events: none; display: flex; transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1); }
+  .mob-menu.open { opacity: 1; pointer-events: all; }
+  .mob-menu a { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 32px; font-weight: 500; color: #0d0d0d; text-decoration: none; letter-spacing: -0.02em; transform: translateY(18px); opacity: 0; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .mob-menu.open a { transform: translateY(0); opacity: 1; }
+  .mob-menu.open a:nth-child(2) { transition-delay: 0.06s; }
+  .mob-menu.open a:nth-child(3) { transition-delay: 0.12s; }
+  .mob-menu.open a:nth-child(4) { transition-delay: 0.18s; }
+  .mob-menu.open a:nth-child(5) { transition-delay: 0.24s; }
+  .mob-menu-close { position: absolute; top: 12px; right: 20px; background: none; border: none; cursor: pointer; padding: 6px; opacity: 0; transform: rotate(-45deg); transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s; }
+  .mob-menu.open .mob-menu-close { opacity: 1; transform: rotate(0deg); }
+
+  @media (max-width: 700px) {
+    .case-header { padding: 12px 24px; }
+    .case-header .ch-logo img { width: 36px; height: 36px; }
+    .case-header nav, .case-header .ch-about { display: none; }
+    .burger-btn { display: flex; flex-direction: column; gap: 6px; background: none; border: none; cursor: pointer; padding: 6px; }
+    .burger-btn span { display: block; width: 24px; height: 1.5px; background: #111; border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease; }
+    .burger-btn.active span:nth-child(1) { transform: translateY(3.75px) rotate(45deg); }
+    .burger-btn.active span:nth-child(2) { transform: translateY(-3.75px) rotate(-45deg); }
+    .hero { padding: 80px 24px 60px; min-height: auto; }
+    .hero h1 { font-size: clamp(13px, 4.2vw, 22px); white-space: nowrap; letter-spacing: -0.02em; }
+    .hero p  { font-size: 14px; white-space: normal; }
+    .hero-break::before { content: '\A'; white-space: pre; }
+    .hero-static { display: none; }
+    .hero-slides {
+      display: block;
+      position: relative;
+      min-height: 2.4em;
+    }
+    .hero-slide {
+      display: block;
+      position: absolute;
+      top: 0; left: 0;
+      font-size: 14px;
+      color: #666;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+    .hero-slide--active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .statement { padding: 40px 24px; min-height: auto; margin-top: 48px; }
+    .statement p { font-size: 17px; }
+
+    .video-block { padding: 40px 16px; }
+
+    .case-intro {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      padding: 48px 24px 40px;
+    }
+    .case-intro h2 { font-size: 36px; }
+    .case-intro .body-text { padding-top: 0; }
+
+    .case-rows { padding: 40px 24px 60px; }
+    .case-row { grid-template-columns: 1fr; gap: 10px; padding: 24px 0; }
+
+    .feat-text { padding: 32px 24px 16px; }
+    .feat-text p { white-space: normal; }
+    .feat-phones img { width: 100%; }
+
+    .outro { padding: 60px 24px; }
+    .outro-thanks { font-size: 36px; line-height: 1.05; margin-bottom: 40px; }
+    .outro-next { font-size: 20px; padding: 22px 40px; }
+
+    footer { padding: 48px 24px 24px; }
+    .footer-grid { flex-direction: column; gap: 24px; padding-bottom: 24px; }
+    .footer-bottom { font-size: 13px; }
+
+    .back-btn { top: 16px; left: 16px; }
+  }
+
+  /* ── Outro ───────────────────────────────────────────────────────────── */
+  .outro {
+    min-height: 60vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: #ffffff;
+    gap: 0;
+    padding: 100px 80px;
+  }
+  .outro-thanks {
+    font-family: -apple-system, 'SF Pro Display', BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    font-size: 48px; font-weight: 700;
+    color: #111;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    text-align: center;
+    margin-bottom: 80px;
+    margin-top: -40px;
+  }
+  .outro-next {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    font-family: -apple-system, 'SF Pro Display', BlinkMacSystemFont, sans-serif;
+    font-size: 32px; font-weight: 500;
+    color: #111;
+    text-decoration: none;
+    border: 1.5px solid #111;
+    padding: 36px 80px;
+    border-radius: 100px;
+    letter-spacing: -0.01em;
+    position: relative;
+    overflow: hidden;
+    transition: color .4s ease;
+  }
+  .outro-next::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #111;
+    transform: translateX(-100%);
+    transition: transform .4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+  }
+  .outro-next:hover::before { transform: translateX(0); }
+  .outro-next:hover { color: #fff; }
+  .outro-next span, .outro-next .arr { position: relative; z-index: 1; }
+  .outro-next .arr {
+    width: 32px; height: 16px;
+    display: inline-block;
+    flex: none;
+    transition: color .4s ease;
+  }
+
+  /* ── Footer ──────────────────────────────────────────────────────────── */
+  footer {
+    background: #e8291c;
+    color: #fff;
+    font-family: -apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    padding: 64px 56px 32px;
+  }
+  .footer-grid {
+    max-width: 1320px; margin: 0 auto;
+    display: flex; flex-wrap: wrap;
+    gap: 40px; justify-content: space-between;
+    padding-bottom: 40px;
+  }
+  .footer-col h3 {
+    font-size: 15px; font-weight: 500;
+    margin-bottom: 14px; color: #fff;
+  }
+  .footer-col a {
+    display: block; color: #fff; text-decoration: none;
+    font-size: 15px; margin-bottom: 8px;
+    opacity: 0.9; transition: opacity .2s ease;
+    position: relative; width: fit-content;
+  }
+  .footer-col a:hover { opacity: 1; }
+  .footer-col a .draw-svg {
+    position: absolute; bottom: -4px; left: 0;
+    width: 100%; height: 7px; overflow: visible; pointer-events: none;
+  }
+  .footer-col a .draw-svg path {
+    fill: none; stroke: #fff; stroke-width: 1.5;
+    stroke-linecap: round; stroke-dasharray: 115; stroke-dashoffset: 115;
+    transition: stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .footer-col a:hover .draw-svg path { stroke-dashoffset: 0; }
+  .footer-col .note { opacity: 0.65; font-size: 13px; }
+  .footer-col a.icon-link { display: inline-flex; align-items: center; gap: 8px; }
+  .footer-col a.icon-link svg { width: 18px; height: 18px; flex: none; }
+  .footer-bottom {
+    max-width: 1320px; margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.25);
+    font-size: 14px; color: rgba(255,255,255,0.8);
+  }
+  .footer-hurski { width: 100%; margin-top: 40px; line-height: 0; display: flex; align-items: flex-end; }
+  .footer-hurski .hurski-text { flex: 1; height: auto; display: block; min-width: 0; }
+  .footer-hurski .hurski-dot { flex-shrink: 0; width: 14%; aspect-ratio: 1; animation: spin-slow 8s linear infinite; margin-bottom: -0.5%; margin-left: -2%; }
+  .hero-slides { display: none; }
+</style>
+</head>
+<body>
+
+<div class="page-curtain" id="pageCurtain"></div>
+
+<div class="mob-menu" id="mobMenu">
+  <button class="mob-menu-close" id="mobMenuClose" aria-label="Close menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="../about.html">About</a>
+  <a href="mailto:uxhurski@gmail.com">Contact</a>
+  <a href="https://hurski.studio/" target="_blank" rel="noopener">Brand Portfolio</a>
+</div>
+
+<header class="case-header" id="caseHeader">
+  <button class="ch-logo" id="backBtn"><img src="../symbol.png" alt="Matt Hurski" /></button>
+  <nav><a href="../index.html">Home</a></nav>
+  <a class="ch-about" href="../about.html">About</a>
+  <button class="burger-btn" id="burgerBtn" aria-label="Open menu"><span></span><span></span></button>
+</header>
+
+
+<!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <h1>From Binary Status to Human Presence</h1>
+  <p class="hero-static">Thousands of contacts, yet zero connection. <span class="hero-break">Current</span> status indicators leave us in a digital void.</p>
+  <div class="hero-slides" aria-hidden="true">
+    <span class="hero-slide hero-slide--active">Thousands of contacts, yet zero connection.</span>
+    <span class="hero-slide">Current status indicators leave us in a digital void.</span>
+  </div>
+</section>
+
+<!-- ── Statement ─────────────────────────────────────────────────────────── -->
+<section class="statement">
+  <p>Modern messengers make us think the worst.<br>
+     Let's turn silence into <span>understanding</span>.</p>
+</section>
+
+<!-- ── Video ─────────────────────────────────────────────────────────────── -->
+<div class="video-block">
+  <video id="heroVideo" src="video_presentation.mp4" autoplay muted playsinline loop webkit-playsinline preload="metadata"></video>
+</div>
+
+<!-- ── Case intro ────────────────────────────────────────────────────────── -->
+<section class="case-intro">
+  <div><h2>AI Presence</h2></div>
+  <div class="body-text">
+    <p>The Pitch: From mechanical "Online/Offline" to Contextual Presence. Reimagining digital closeness through AI-driven empathy.</p>
+  </div>
+</section>
+
+<!-- ── Structured rows ───────────────────────────────────────────────────── -->
+<div class="case-rows">
+
+  <div class="case-row">
+    <div class="case-row-label">The problem</div>
+    <div class="case-row-body">
+      Current status indicators are stagnant and binary, leading to:
+      <ul>
+        <li>Communication Anxiety: "Are they ignoring me?" or "Did I interrupt their sleep?"</li>
+        <li>The Digital Void: When everyone is offline, the app feels like a "data graveyard" rather than a living community.</li>
+        <li>Friction: Lack of social intuition makes it hard to know the right time to reach out.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="case-row">
+    <div class="case-row-label">The Solution</div>
+    <div class="case-row-body">
+      An AI-driven "third state" that synthesises activity patterns into a living, breathing status. It replaces cold metadata with human expectations.
+    </div>
+  </div>
+
+  <div class="case-row">
+    <div class="case-row-label">Design Highlights</div>
+    <div class="case-row-body">
+      <ul>
+        <li>The "Breathing" UI: Replaced the static grey dot with a soft, pulsing glow around the avatar. This visual "echo" signals a warm connection instead of a dead digital link.</li>
+        <li>Contextual Insights: Replaced cold timestamps like "Last active: 5h ago" with empathetic, human-centric copy such as "Likely commuting" or "Usually free in the evenings."</li>
+        <li>Anticipatory UX: Introduced intelligent, semi-transparent nudges that suggest "Send Silently" when the AI detects the recipient is sleeping or in a flow state, protecting the peace of both users.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="case-row">
+    <div class="case-row-label">The Meta Impact</div>
+    <div class="case-row-body">
+      <ul>
+        <li>Meaningful Social Interaction (MSI): High-quality connection over mindless pings.</li>
+        <li>Digital Wellbeing: Normalising being offline without the fear of "disappearing."</li>
+        <li>Privacy-First: Granular control over how much of your "Echo" is visible.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Ambient Awareness ──────────────────────────────────────────────────── -->
+<div class="feat-text">
+  <h3>Ambient Awareness</h3>
+  <p>The chat list becomes a living map of your social circle, providing instant intuition on when to connect.</p>
+</div>
+<div class="feat-phones tinted">
+  <img src="forthecase1.jpg" alt="Ambient Awareness" loading="lazy">
+</div>
+
+<!-- ── Empathetic Interaction ─────────────────────────────────────────────── -->
+<div class="feat-text" style="padding-bottom:40px">
+  <h3>Empathetic Interaction</h3>
+  <p>Intelligent nudges and focus-state awareness transform silence from 'rejection' into 'mutual respect.'</p>
+</div>
+<div class="feat-phones tinted" style="padding-top:40px">
+  <img src="forthecase2.jpg" alt="Empathetic Interaction" loading="lazy">
+</div>
+
+<!-- ── Privacy by Design ──────────────────────────────────────────────────── -->
+<div class="feat-text" style="padding-bottom:20px">
+  <h3>Privacy by Design</h3>
+  <p>Granular transparency ensures users are always in control of their digital footprint.</p>
+</div>
+<div class="feat-phones" style="padding-top:20px">
+  <img src="forthecase3.jpg" alt="Privacy by Design" loading="lazy">
+</div>
+
+<!-- ── Outro ───────────────────────────────────────────────────────────────── -->
+<section class="outro" id="outro">
+  <p class="outro-thanks">Keep exploring.</p>
+  <a class="outro-next" href="../case_meta_gaze/case_meta.html">
+    <span>Next</span>
+    <svg class="arr" viewBox="0 0 36 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 8h33M26 1l8 7-8 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h3>Contact</h3>
+      <a href="mailto:uxhurski@gmail.com">uxhurski@gmail.com<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+      <a href="tel:+48787603923">+48 787 603 923 <span class="note">(WhatsApp)</span><svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+    <div class="footer-col">
+      <h3>Photography</h3>
+      <a class="icon-link" href="https://www.instagram.com/ownthetalent/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>
+        ownthetalent
+      </a>
+    </div>
+    <div class="footer-col">
+      <h3>Design</h3>
+      <a href="https://www.linkedin.com/in/hurski/" target="_blank" rel="noopener">LinkedIn<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+    <div class="footer-col">
+      <h3>More</h3>
+      <a href="https://hurski.studio/" target="_blank" rel="noopener">Brand Portfolio<svg class="draw-svg" viewBox="0 0 100 7" preserveAspectRatio="none"><path d="M0,4 Q25,1 50,4 Q75,7 100,4"/></svg></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Matt Hurski · Designed & coded by me
+  </div>
+  <div class="footer-hurski">
+    <img class="hurski-text" src="HURSKI_nodot.svg" alt="HURSKI">
+    <img class="hurski-dot" src="symbol_for_footer.png" alt="·">
+  </div>
+</footer>
+
+<script>
+document.getElementById('backBtn').addEventListener('click', function() {
+  sessionStorage.setItem('introSeen', '1');
+  var curtain = document.getElementById('pageCurtain');
+  curtain.classList.add('on');
+  setTimeout(function() { window.location.href = '../index.html'; }, 480);
+});
+
+var header = document.getElementById('caseHeader');
+window.addEventListener('scroll', function() {
+  header.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+(function() {
+  var v = document.getElementById('heroVideo');
+  if (!v) return;
+  v.muted = true;
+  v.setAttribute('muted', '');
+  var p = v.play();
+  if (p !== undefined) {
+    p.catch(function() {
+      document.addEventListener('touchstart', function resume() {
+        v.play();
+        document.removeEventListener('touchstart', resume);
+      }, { once: true });
+    });
+  }
+})();
+
+if (window.matchMedia('(max-width: 700px)').matches) {
+  var slides = document.querySelectorAll('.hero-slide');
+  var current = 0;
+  setInterval(function() {
+    slides[current].classList.remove('hero-slide--active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('hero-slide--active');
+  }, 3000);
+}
+
+(function(){
+  var btn = document.getElementById('burgerBtn');
+  var menu = document.getElementById('mobMenu');
+  var close = document.getElementById('mobMenuClose');
+  if (!btn || !menu) return;
+  function openMenu() { menu.classList.add('open'); btn.classList.add('active'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { menu.classList.remove('open'); btn.classList.remove('active'); document.body.style.overflow = ''; }
+  btn.addEventListener('click', openMenu);
+  close.addEventListener('click', closeMenu);
+  menu.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+})();
+</script>
+</body>
+</html>
